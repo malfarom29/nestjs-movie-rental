@@ -1,4 +1,11 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {
+  Entity,
+  BaseEntity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+} from 'typeorm';
+import { MovieLog } from './movie-log.entity';
 
 @Entity()
 export class Movie extends BaseEntity {
@@ -20,6 +27,12 @@ export class Movie extends BaseEntity {
   @Column({ type: 'float' })
   rentalPrice: number;
 
-  @Column()
+  @Column({ default: true })
   availability: boolean;
+
+  @OneToMany(
+    type => MovieLog,
+    movieLog => movieLog.movie,
+  )
+  movieLogs: MovieLog[];
 }
