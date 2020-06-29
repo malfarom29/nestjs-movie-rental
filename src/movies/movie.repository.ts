@@ -41,7 +41,6 @@ export class MovieRepository extends Repository<Movie> {
     movie.stock = stock;
     movie.salePrice = salePrice;
     movie.rentalPrice = rentalPrice;
-    movie.availability = true;
 
     try {
       await movie.save();
