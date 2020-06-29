@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MovieRepository } from './movie.repository';
@@ -6,12 +6,16 @@ import { Movie } from './movie.entity';
 import { MoviesPaginationDto } from './dto/movies-pagination.dto';
 import { PaginatedMoviesDto } from './dto/paginated-movies.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { MovieLogRepository } from './movie-log.repository';
 
 @Injectable()
 export class MoviesService {
+  private readonly logger = new Logger();
   constructor(
     @InjectRepository(MovieRepository)
     private movieRepository: MovieRepository,
+    @InjectRepository(MovieLogRepository)
+    private movieLogRepository: MovieLogRepository,
   ) {}
 
   async getMovies(
@@ -44,6 +48,9 @@ export class MoviesService {
 
   async updateMove(id: number, updateMovieDto: UpdateMovieDto): Promise<Movie> {
     const movie = await this.getMovieById(id);
+    this.movieLogRepository
+      .createMovieLog(movie, updateMovieDto)
+      .then(() => this.logger.verbose(`Movie log saved successfully`));
 
     return this.movieRepository.save({ ...movie, ...updateMovieDto });
   }
