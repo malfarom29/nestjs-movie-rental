@@ -4,6 +4,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   OneToMany,
+  BeforeUpdate,
+  getConnection,
 } from 'typeorm';
 import { MovieLog } from './movie-log.entity';
 
@@ -35,4 +37,17 @@ export class Movie extends BaseEntity {
     movieLog => movieLog.movie,
   )
   movieLogs: MovieLog[];
+
+  @BeforeUpdate()
+  logChanges(): void {
+    console.log('updating movie...');
+    delete this.id;
+
+    getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(MovieLog)
+      .values({ ...this, movieId: this.id })
+      .execute();
+  }
 }

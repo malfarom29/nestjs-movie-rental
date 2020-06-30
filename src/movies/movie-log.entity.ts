@@ -12,29 +12,17 @@ export class MovieLog extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: true })
-  oldTitle: string;
+  @Column()
+  title: string;
 
-  @Column({ nullable: true })
-  newTitle: string;
+  @Column()
+  description: string;
 
-  @Column({ nullable: true })
-  oldDescription: string;
+  @Column()
+  salePrice: number;
 
-  @Column({ nullable: true })
-  newDescription: string;
-
-  @Column({ type: 'float', nullable: true })
-  oldSalePrice: number;
-
-  @Column({ type: 'float', nullable: true })
-  newSalePrice: number;
-
-  @Column({ type: 'float', nullable: true })
-  oldRentalPrice: number;
-
-  @Column({ type: 'float', nullable: true })
-  newRentalPrice: number;
+  @Column()
+  rentalPrice: number;
 
   @Column()
   movieId: number;
