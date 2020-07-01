@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Movie } from './movie.entity';
+import { Movie } from './entities/movie.entity';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { InternalServerErrorException } from '@nestjs/common';
 import { MoviesPaginationDto } from './dto/movies-pagination.dto';

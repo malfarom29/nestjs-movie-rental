@@ -1,11 +1,9 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
-import { CreateMovieDto } from './dto/create-movie.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MovieRepository } from './movie.repository';
-import { Movie } from './movie.entity';
+import { Movie } from './entities/movie.entity';
 import { MoviesPaginationDto } from './dto/movies-pagination.dto';
 import { PaginatedMoviesDto } from './dto/paginated-movies.dto';
-import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Injectable()
 export class MoviesService {
@@ -37,32 +35,5 @@ export class MoviesService {
     }
 
     return movie;
-  }
-
-  async createMovie(createMovieDto: CreateMovieDto): Promise<Movie> {
-    return this.movieRepository.createMovie(createMovieDto);
-  }
-
-  async updateMove(id: number, updateMovieDto: UpdateMovieDto): Promise<Movie> {
-    const movie = await this.getMovieById(id);
-    await this.movieRepository.update(movie, updateMovieDto);
-    await movie.reload();
-
-    return movie;
-  }
-
-  async updateMovieAvailability(id: number): Promise<Movie> {
-    const movie = await this.getMovieById(id);
-    movie.availability = !movie.availability;
-    movie.save();
-
-    return movie;
-  }
-
-  async deleteMovie(id: number): Promise<void> {
-    const result = await this.movieRepository.delete({ id });
-    if (result.affected === 0) {
-      throw new NotFoundException(`Task with ID "${id}" not found`);
-    }
   }
 }
