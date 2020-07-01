@@ -12,4 +12,9 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   database: process.env.RDS_DB_NAME || dbConfig.database,
   entities: [__dirname + '/../**/*.entity.{ts,js}'],
   synchronize: process.env.TYPEORM_SYNC || dbConfig.synchronize,
+  migrationsTableName: 'migrations',
+  migrations: ['migrations/*.ts'],
+  cli: {
+    migrationsDir: __dirname + '/../../migrations',
+  },
 };
