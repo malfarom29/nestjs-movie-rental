@@ -3,7 +3,7 @@ import { CreateMovieDto } from 'src/movies/dto/create-movie.dto';
 import { Movie } from 'src/movies/entities/movie.entity';
 import { UpdateMovieDto } from 'src/movies/dto/update-movie.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MovieRepository } from 'src/movies/movie.repository';
+import { MovieRepository } from 'src/movies/repositories/movie.repository';
 
 @Injectable()
 export class MoviesService {

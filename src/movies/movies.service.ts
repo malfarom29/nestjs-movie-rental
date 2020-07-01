@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MovieRepository } from './movie.repository';
+import { MovieRepository } from './repositories/movie.repository';
 import { Movie } from './entities/movie.entity';
 import { MoviesPaginationDto } from './dto/movies-pagination.dto';
 import { PaginatedMoviesDto } from './dto/paginated-movies.dto';
