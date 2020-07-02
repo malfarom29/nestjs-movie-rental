@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from 'src/user/repositories/user.repository';
 import * as config from 'config';
 import { JwtPayload } from './jwt-payload.interface';
+import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -18,18 +19,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(
-    payload: JwtPayload,
-  ): Promise<{ username: string; roles: string[] }> {
-    const { username, roles } = payload;
-    const user = await this.userRepository.findOne({ username });
+  async validate(payload: JwtPayload): Promise<AuthorizedUser> {
+    const { username } = payload;
+    const user = await this.userRepository.findOne(
+      { username },
+      { relations: ['roles'] },
+    );
 
     if (!user) {
       throw new UnauthorizedException();
     }
 
-    const roleNames: string[] = roles.map(role => role.label);
+    const roleNames: string[] = user.roles.map(role => role.label);
 
-    return { username, roles: roleNames };
+    return { userId: user.id, username, roles: roleNames };
   }
 }

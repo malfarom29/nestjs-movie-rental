@@ -4,10 +4,11 @@ import { MoviesService } from './movies/movies.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MovieRepository } from 'src/movies/repositories/movie.repository';
 import { PassportModule } from '@nestjs/passport';
+import { MovieAttachmentRepository } from 'src/movies/repositories/movie-attachment.repository';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([MovieRepository]),
+    TypeOrmModule.forFeature([MovieRepository, MovieAttachmentRepository]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [MoviesController],

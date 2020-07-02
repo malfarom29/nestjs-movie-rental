@@ -4,12 +4,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   OneToMany,
-  BeforeUpdate,
-  getConnection,
   BeforeInsert,
+  JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { MovieLog } from './movie-log.entity';
-import { LineRentalOrder } from 'src/order/entities/line-rental-order.entity';
+import { RentalOrder } from 'src/database/entities/rental-order.entity';
+import { MovieAttachment } from './movie-attachment.entity';
 
 @Entity()
 export class Movie extends BaseEntity {
@@ -25,6 +26,9 @@ export class Movie extends BaseEntity {
   @Column()
   stock: number;
 
+  @Column({ default: 0 })
+  onRent: number;
+
   @Column({ type: 'float' })
   salePrice: number;
 
@@ -37,6 +41,9 @@ export class Movie extends BaseEntity {
   @Column({ type: 'float' })
   dailyPenalty: number;
 
+  @Column({ nullable: true })
+  imageId: number;
+
   @OneToMany(
     type => MovieLog,
     movieLog => movieLog.movie,
@@ -44,10 +51,14 @@ export class Movie extends BaseEntity {
   movieLogs: MovieLog[];
 
   @OneToMany(
-    type => LineRentalOrder,
-    lineRentalOrder => lineRentalOrder.movie,
+    type => RentalOrder,
+    rentalOrder => rentalOrder.movie,
   )
-  lineRentalOrders: LineRentalOrder[];
+  rentalOrders: RentalOrder[];
+
+  @OneToOne(type => MovieAttachment)
+  @JoinColumn()
+  image: MovieAttachment;
 
   @BeforeInsert()
   setDailyPenalty(): void {

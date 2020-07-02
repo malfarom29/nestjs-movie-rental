@@ -19,9 +19,12 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "ts-node ./node_modules/typeorm/cli.js",
-    "migrate:create": "typeorm migration:create -n",
-    "migrate:gen": "typeorm migration:generate -n"
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:gen": "npm run typeorm -- migration:generate -n",
+    "migration:create": "npm run typeorm -- migration:create -n",
+    "migration:run": "npm run typeorm migration:run",
+    "migration:revert": "npm run typeorm migration:revert",
+    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
@@ -30,7 +33,9 @@
     "@nestjs/jwt": "^7.0.0",
     "@nestjs/passport": "^7.1.0",
     "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/swagger": "^4.5.12",
     "@nestjs/typeorm": "^7.1.0",
+    "@types/dotenv": "^8.2.0",
     "@types/nodemailer": "^6.4.0",
     "aws-sdk": "^2.706.0",
     "bcrypt": "^5.0.0",
@@ -45,6 +50,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
+    "swagger-ui-express": "^4.1.4",
     "typeorm": "^0.2.25",
     "typeorm-seeding": "^1.6.1",
     "uuid": "^8.2.0"

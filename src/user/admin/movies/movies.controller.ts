@@ -12,13 +12,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CreateMovieDto } from 'src/movies/dto/create-movie.dto';
-import { Movie } from 'src/movies/entities/movie.entity';
+import { Movie } from 'src/database/entities/movie.entity';
 import { UpdateMovieDto } from 'src/movies/dto/update-movie.dto';
 import { MoviesService } from './movies.service';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/shared/guards/roles.guard';
 import { Roles } from 'src/shared/decorators/roles.decorator';
 import { UserRoles } from 'src/shared/constants';
+import { UploadMovieImageDto } from 'src/movies/dto/upload-movie-image.dto';
 
 @Controller('admin/movies')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -38,7 +39,7 @@ export class MoviesController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateMovieDto: UpdateMovieDto,
   ): Promise<Movie> {
-    return this.moviesService.updateMove(id, updateMovieDto);
+    return this.moviesService.updateMovie(id, updateMovieDto);
   }
 
   @Patch('/:id/availability')
@@ -51,5 +52,14 @@ export class MoviesController {
   @Delete('/:id')
   deleteMovie(@Param('id', ParseIntPipe) id: number): Promise<void> {
     return this.moviesService.deleteMovie(id);
+  }
+
+  @Put('/:id/signed-url')
+  @UsePipes(ValidationPipe)
+  uploadImage(
+    @Body() uploadMovieImageDto: UploadMovieImageDto,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<string> {
+    return this.moviesService.saveImageKey(id, uploadMovieImageDto);
   }
 }

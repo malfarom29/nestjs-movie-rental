@@ -1,4 +1,4 @@
-import { Movie } from '../entities/movie.entity';
+import { Movie } from '../../database/entities/movie.entity';
 
 export class PaginatedMoviesDto {
   data: Movie[];
