@@ -1,10 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import { loadEnvironmentVariables } from './loader';
 
 async function bootstrap() {
-  await loadEnvironmentVariables();
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('/api/v1');
 
