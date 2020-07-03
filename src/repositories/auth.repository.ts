@@ -1,14 +1,15 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Auth } from '../../database/entities/auth.entity';
+import { Auth } from '../database/entities/auth.entity';
 import { InternalServerErrorException } from '@nestjs/common';
 import { nanoid } from 'nanoid';
 
 @EntityRepository(Auth)
 export class AuthRepository extends Repository<Auth> {
-  async signIn(accessToken: string): Promise<Auth> {
+  async signIn(accessToken: string, userId: number): Promise<Auth> {
     const auth = new Auth();
 
     auth.accessToken = accessToken;
+    auth.userId = userId;
     auth.refreshToken = nanoid();
 
     try {

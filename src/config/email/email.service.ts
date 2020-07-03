@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { transporter } from '../config/nodemailer.config';
+import { transporter } from './nodemailer.config';
 
 @Injectable()
 export class EmailService {
@@ -15,7 +15,7 @@ export class EmailService {
         from: 'noreply@movierental.com',
         to: emailReceiver,
         subject,
-        text: body,
+        html: body,
       });
       this.logger.verbose(`Email successfully sent to: ${emailReceiver}`);
     } catch (error) {

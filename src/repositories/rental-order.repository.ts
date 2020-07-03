@@ -1,16 +1,38 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { RentalOrder } from '../../database/entities/rental-order.entity';
-import { Movie } from 'src/database/entities/movie.entity';
+import { RentalOrder } from '../database/entities';
+import { Movie } from 'src/database/entities';
 import {
   Logger,
   InternalServerErrorException,
-  HttpException,
   BadRequestException,
 } from '@nestjs/common';
+import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 
 @EntityRepository(RentalOrder)
 export class RentalOrderRepository extends Repository<RentalOrder> {
   private readonly logger = new Logger();
+
+  async getMyRentalOrders(
+    userId: number,
+    paginationDto: PaginationDto,
+  ): Promise<[RentalOrder[], number]> {
+    const query = this.createQueryBuilder('purchase_order').where({
+      userId: userId,
+    });
+    const page = paginationDto.page;
+    const limit = paginationDto.limit ? paginationDto.limit : 10;
+
+    if (page) {
+      const skippedItems = (page - 1) * limit;
+      query.offset(skippedItems);
+    }
+
+    query.limit(limit);
+
+    const data = query.getManyAndCount();
+
+    return data;
+  }
 
   async rentMovie(
     movie: Movie,

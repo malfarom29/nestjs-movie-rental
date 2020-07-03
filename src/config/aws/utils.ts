@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid';
-import { awsS3 } from '../config/aws-sdk.config';
+import { awsS3 } from './aws-sdk.config';
 import * as config from 'config';
 
 const awsConfig = config.get('aws');

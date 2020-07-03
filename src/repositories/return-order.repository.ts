@@ -1,11 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { ReturnOrder } from '../../database/entities/return-order.entity';
+import { ReturnOrder } from '../database/entities/return-order.entity';
 import {
   Logger,
   InternalServerErrorException,
   ConflictException,
 } from '@nestjs/common';
-import { RentalOrderDto } from '../rental-orders/dto/response/rental-order.dto';
+import { RentalOrderDto } from '../order/rental-orders/dto/response/rental-order.dto';
 
 @EntityRepository(ReturnOrder)
 export class ReturnOrderRepository extends Repository<ReturnOrder> {
@@ -14,14 +14,15 @@ export class ReturnOrderRepository extends Repository<ReturnOrder> {
   async returnMovie(rentalOrder: RentalOrderDto): Promise<ReturnOrder> {
     const rentalReturn = this.create();
     const moviePenalty = rentalOrder.movie.dailyPenalty;
-    const today = new Date();
-    const diffTime = Math.abs(
-      rentalOrder.toBeReturnedAt.getTime() - today.getTime(),
-    );
+    const today = new Date('2020-07-16');
+    const diffTime = today.getTime() - rentalOrder.toBeReturnedAt.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
+    const penalty =
+      diffDays < 0 ? 0 : Number((moviePenalty * diffDays).toFixed(2));
+
     rentalReturn.rentalOrderId = rentalOrder.id;
-    rentalReturn.penalty = moviePenalty * diffDays;
+    rentalReturn.penalty = penalty;
     rentalReturn.createdAt = today;
 
     try {
