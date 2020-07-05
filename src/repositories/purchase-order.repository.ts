@@ -1,9 +1,8 @@
-import { User } from '../database/entities/user.entity';
 import { PurchaseOrder } from '../database/entities';
 import { Movie } from '../database/entities';
 import { Logger, InternalServerErrorException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
-import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
+import { PaginationDto } from 'src/dtos/request/pagination.dto';
 
 @EntityRepository(PurchaseOrder)
 export class PurchaseOrderRepository extends Repository<PurchaseOrder> {
@@ -15,7 +14,7 @@ export class PurchaseOrderRepository extends Repository<PurchaseOrder> {
     userId: number,
   ): Promise<PurchaseOrder> {
     const purchase = new PurchaseOrder();
-    purchase.movie = movie;
+    purchase.movieId = movie.id;
     purchase.quantity = quantity;
     purchase.total = Number((movie.salePrice * quantity).toFixed(2));
     purchase.userId = userId;

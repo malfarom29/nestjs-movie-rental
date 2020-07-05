@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CreateMovieDto } from 'src/movies/dto/create-movie.dto';
-import { Movie } from 'src/database/entities/movie.entity';
+import { Movie } from 'src/database/entities';
 import { UpdateMovieDto } from 'src/movies/dto/update-movie.dto';
 import { MoviesService } from './movies.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -54,12 +54,12 @@ export class MoviesController {
     return this.moviesService.deleteMovie(id);
   }
 
-  @Put('/:id/signed-url')
+  @Patch('/:id/signed-url')
   @UsePipes(ValidationPipe)
   uploadImage(
     @Body() uploadMovieImageDto: UploadMovieImageDto,
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<string> {
+  ): Promise<{ signedUrl: string }> {
     return this.moviesService.saveImageKey(id, uploadMovieImageDto);
   }
 }

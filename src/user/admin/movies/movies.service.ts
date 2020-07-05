@@ -1,12 +1,17 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  Logger,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateMovieDto } from 'src/movies/dto/create-movie.dto';
-import { Movie } from 'src/database/entities/movie.entity';
+import { Movie } from 'src/database/entities';
 import { UpdateMovieDto } from 'src/movies/dto/update-movie.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MovieRepository } from 'src/movies/repositories/movie.repository';
-import * as aws from '../../../aws/utils';
+import { MovieRepository } from 'src/repositories/movie.repository';
+import * as aws from '../../../config/aws/utils';
 import { UploadMovieImageDto } from 'src/movies/dto/upload-movie-image.dto';
-import { MovieAttachmentRepository } from 'src/movies/repositories/movie-attachment.repository';
+import { MovieAttachmentRepository } from 'src/repositories/movie-attachment.repository';
 
 @Injectable()
 export class MoviesService {
@@ -36,9 +41,9 @@ export class MoviesService {
     id: number,
     updateMovieDto: UpdateMovieDto,
   ): Promise<Movie> {
-    const movie = this.movieRepository.create(await this.getMovieById(id));
-    await this.movieRepository.update(movie, updateMovieDto);
-    await movie.reload();
+    await this.movieRepository.update(id, updateMovieDto);
+
+    const movie = await this.getMovieById(id);
 
     return movie;
   }
@@ -61,16 +66,15 @@ export class MoviesService {
   async saveImageKey(
     id: number,
     uploadMovieImageDto: UploadMovieImageDto,
-  ): Promise<string> {
+  ): Promise<{ signedUrl: string }> {
     const { fileType, mimeType } = uploadMovieImageDto;
     const awsUploadData = await aws.uploadSignedUrl(fileType, mimeType);
-    const [movie, attachment] = await Promise.all([
-      this.getMovieById(id),
-      this.movieAttachmentRepository.saveSignedUrl(awsUploadData),
-    ]);
-    await this.movieRepository.update(movie, { image: attachment });
-    await movie.reload();
+    const attachment = await this.movieAttachmentRepository.saveSignedUrl(
+      awsUploadData,
+    );
 
-    return awsUploadData.signedUrl;
+    await this.movieRepository.update(id, { image: attachment });
+
+    return { signedUrl: awsUploadData.signedUrl };
   }
 }

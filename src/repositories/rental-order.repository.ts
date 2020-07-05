@@ -6,7 +6,7 @@ import {
   InternalServerErrorException,
   BadRequestException,
 } from '@nestjs/common';
-import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
+import { PaginationDto } from 'src/dtos/request/pagination.dto';
 
 @EntityRepository(RentalOrder)
 export class RentalOrderRepository extends Repository<RentalOrder> {
@@ -16,7 +16,7 @@ export class RentalOrderRepository extends Repository<RentalOrder> {
     userId: number,
     paginationDto: PaginationDto,
   ): Promise<[RentalOrder[], number]> {
-    const query = this.createQueryBuilder('purchase_order').where({
+    const query = this.createQueryBuilder('rental_order').where({
       userId: userId,
     });
     const page = paginationDto.page;

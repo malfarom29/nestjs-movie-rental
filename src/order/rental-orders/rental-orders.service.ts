@@ -1,17 +1,20 @@
+import { RentalOrder } from './../../database/entities/rental-order.entity';
 import {
   Injectable,
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RentalOrderRepository } from '../repositories/rental-order.repository';
+import { RentalOrderRepository } from '../../repositories/rental-order.repository';
 import { MoviesService } from 'src/movies/movies.service';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { RentalOrderDto } from './dto/response/rental-order.dto';
 import { plainToClass } from 'class-transformer';
-import { ReturnOrderRepository } from '../repositories/return-order.repository';
+import { ReturnOrderRepository } from '../../repositories/return-order.repository';
 import { ReturnOrderDto } from './dto/response/return-order.dto';
-import { MovieRepository } from 'src/movies/repositories/movie.repository';
+import { MovieRepository } from 'src/repositories/movie.repository';
+import { PaginationDto } from 'src/dtos/request/pagination.dto';
+import { PaginatedDataDto } from 'src/dtos/response/paginated-data.dto';
 
 @Injectable()
 export class RentalOrdersService {
@@ -45,10 +48,12 @@ export class RentalOrdersService {
     user: AuthorizedUser,
     toBeReturnedAt: Date,
   ): Promise<RentalOrderDto> {
-    const movie = await this.movieRepository.findOne({ id: movieId });
+    const movie = await this.moviesService.findMovie(movieId);
 
-    if (!movie) {
-      throw new NotFoundException(`Movie with ID "${movieId}" not found`);
+    if (!movie.availability) {
+      throw new BadRequestException(
+        `Movie with ID "${movieId} is no longer available"`,
+      );
     }
 
     if (movie.stock === 0) {
@@ -76,5 +81,23 @@ export class RentalOrdersService {
       movie: rental.movie,
       ...returnOrder,
     });
+  }
+
+  async getMyRentalOrders(
+    user: AuthorizedUser,
+    paginationDto: PaginationDto,
+  ): Promise<PaginatedDataDto<RentalOrder>> {
+    const data = await this.rentalOrderRepository.getMyRentalOrders(
+      user.userId,
+      paginationDto,
+    );
+    const paginatedOrders: PaginatedDataDto<RentalOrder> = {
+      data: data[0],
+      totalCount: data[1],
+      page: paginationDto.page ? Number(paginationDto.page) : 1,
+      limit: paginationDto.limit ? Number(paginationDto.limit) : 10,
+    };
+
+    return paginatedOrders;
   }
 }

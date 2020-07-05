@@ -6,6 +6,7 @@ import {
   Param,
   Get,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/shared/guards/roles.guard';
@@ -14,13 +15,16 @@ import { UserRoles } from 'src/shared/constants';
 import { RentalOrdersService } from './rental-orders.service';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
-import { DayFromNowValidationPipe } from './pipes/day-from-now-validation.pipe';
+import { DayFromNowValidationPipe } from '../../shared/pipes/day-from-now-validation.pipe';
 import { RentalOrderDto } from './dto/response/rental-order.dto';
 import { ReturnOrderDto } from './dto/response/return-order.dto';
+import { PaginatedDataDto } from 'src/dtos/response/paginated-data.dto';
+import { RentalOrder } from 'src/database/entities';
+import { PaginationDto } from 'src/dtos/request/pagination.dto';
 
 @Controller('rental-orders')
 @UseGuards(AuthGuard(), RolesGuard)
-@Roles(UserRoles.CUSTOMER, UserRoles.ADMIN)
+@Roles(UserRoles.CUSTOMER)
 export class RentalOrdersController {
   constructor(private rentalOrdersService: RentalOrdersService) {}
 
@@ -43,5 +47,13 @@ export class RentalOrdersController {
   @Post('/:id/return')
   returnMovie(@Param('id', ParseIntPipe) id: number): Promise<ReturnOrderDto> {
     return this.rentalOrdersService.returnMovie(id);
+  }
+
+  @Get()
+  getMyRentalOrders(
+    @Query() paginationDto: PaginationDto,
+    @GetUser() user: AuthorizedUser,
+  ): Promise<PaginatedDataDto<RentalOrder>> {
+    return this.rentalOrdersService.getMyRentalOrders(user, paginationDto);
   }
 }
