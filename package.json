@@ -19,12 +19,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "migration:gen": "npm run typeorm -- migration:generate -n",
-    "migration:create": "npm run typeorm -- migration:create -n",
-    "migration:run": "npm run typeorm migration:run",
-    "migration:revert": "npm run typeorm migration:revert",
-    "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm",
+    "migration:gen": "npm run build && npm run typeorm -- migration:generate -n",
+    "migration:run": "npm run build && npm run typeorm -- migration:run",
+    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
+    "seed:run": "npm run build && ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
   },
   "dependencies": {
     "@nestjs/common": "^7.0.0",
@@ -42,6 +41,8 @@
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
     "config": "^3.3.1",
+    "crypto": "^1.0.1",
+    "lodash": "^4.17.15",
     "nanoid": "^3.1.10",
     "nodemailer": "^6.4.10",
     "passport": "^0.4.1",
