@@ -2,7 +2,7 @@ import { PurchaseOrder } from '../database/entities';
 import { Movie } from '../database/entities';
 import { Logger, InternalServerErrorException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
-import { PaginationDto } from 'src/dtos/request/pagination.dto';
+import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 
 @EntityRepository(PurchaseOrder)
 export class PurchaseOrderRepository extends Repository<PurchaseOrder> {
@@ -29,25 +29,23 @@ export class PurchaseOrderRepository extends Repository<PurchaseOrder> {
     return purchase;
   }
 
-  getMyPurchaseOrders(
+  async getMyPurchaseOrders(
     userId: number,
     paginationDto: PaginationDto,
-  ): Promise<[PurchaseOrder[], number]> {
-    const query = this.createQueryBuilder('purchase_order').where({
-      userId: userId,
-    });
-    const page = paginationDto.page;
-    const limit = paginationDto.limit ? paginationDto.limit : 10;
+  ): Promise<{ data: PurchaseOrder[]; totalCount: number }> {
+    const page = paginationDto.page || 1;
+    const limit = paginationDto.limit || 10;
+    const skip = (page - 1) * limit;
+    const query = this.createQueryBuilder('purchase_order').leftJoinAndSelect(
+      'purchase_order.movie',
+      'movie',
+    );
 
-    if (page) {
-      const skippedItems = (page - 1) * limit;
-      query.offset(skippedItems);
-    }
+    query.where({ userId });
+    query.take(limit).skip(skip);
 
-    query.limit(limit);
+    const [purchaseOrders, total] = await query.getManyAndCount();
 
-    const data = query.getManyAndCount();
-
-    return data;
+    return { data: purchaseOrders, totalCount: total };
   }
 }
