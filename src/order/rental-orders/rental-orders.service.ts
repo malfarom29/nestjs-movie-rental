@@ -1,3 +1,4 @@
+import { OrderSerializer } from './../../shared/serializers/order-serializer';
 import { RentalOrder } from './../../database/entities/rental-order.entity';
 import {
   Injectable,
@@ -8,25 +9,26 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RentalOrderRepository } from '../../repositories/rental-order.repository';
 import { MoviesService } from 'src/movies/movies.service';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
-import { RentalOrderDto } from './dto/response/rental-order.dto';
+import { RentalOrderDto } from '../../dtos/response/rental-order.dto';
 import { plainToClass } from 'class-transformer';
 import { ReturnOrderRepository } from '../../repositories/return-order.repository';
-import { ReturnOrderDto } from './dto/response/return-order.dto';
-import { MovieRepository } from 'src/repositories/movie.repository';
 import { PaginationDto } from 'src/dtos/request/pagination.dto';
 import { PaginatedDataDto } from 'src/dtos/response/paginated-data.dto';
+import { OrderResponseDto } from 'src/dtos/response/order-response.dto';
+import { ReturnOrderResponseDto } from 'src/dtos/response/return-order-response.dto';
 
 @Injectable()
 export class RentalOrdersService {
+  private serializer: OrderSerializer;
   constructor(
     @InjectRepository(RentalOrderRepository)
     private rentalOrderRepository: RentalOrderRepository,
     @InjectRepository(ReturnOrderRepository)
     private returnOrderRepository: ReturnOrderRepository,
-    @InjectRepository(MovieRepository)
-    private movieRepository: MovieRepository,
     private moviesService: MoviesService,
-  ) {}
+  ) {
+    this.serializer = new OrderSerializer();
+  }
 
   async getRentalOrderById(id: number): Promise<RentalOrderDto> {
     const rental = await this.rentalOrderRepository.findOne(
@@ -47,7 +49,7 @@ export class RentalOrdersService {
     movieId: number,
     user: AuthorizedUser,
     toBeReturnedAt: Date,
-  ): Promise<RentalOrderDto> {
+  ): Promise<OrderResponseDto<RentalOrderDto>> {
     const movie = await this.moviesService.findMovie(movieId);
 
     if (!movie.availability) {
@@ -70,17 +72,29 @@ export class RentalOrdersService {
     await movie.reload();
     const rentalOrder = plainToClass(RentalOrderDto, { movie, ...rental });
 
-    return rentalOrder;
+    return this.serializer.serialize<RentalOrderDto>(rentalOrder, movie);
   }
 
-  async returnMovie(rentalOrderId: number): Promise<ReturnOrderDto> {
-    const rental = await this.getRentalOrderById(rentalOrderId);
-    const returnOrder = await this.returnOrderRepository.returnMovie(rental);
+  async returnMovie(
+    rentalOrderId: number,
+  ): Promise<OrderResponseDto<ReturnOrderResponseDto>> {
+    const rental = await this.findRentalOrder(rentalOrderId);
+    if (!rental) {
+      throw new NotFoundException(
+        `Rental Order with ID "${rentalOrderId}" not found`,
+      );
+    }
+
+    await this.returnOrderRepository.returnMovie(rental);
+    const returnOrder = await this.returnOrderRepository.findOne(
+      {
+        rentalOrderId: rental.id,
+      },
+      { relations: ['rentalOrder'] },
+    );
     await rental.movie.reload();
-    return plainToClass(ReturnOrderDto, {
-      movie: rental.movie,
-      ...returnOrder,
-    });
+
+    return this.serializer.serializeWithRentalOrder(returnOrder);
   }
 
   async getMyRentalOrders(
@@ -99,5 +113,9 @@ export class RentalOrdersService {
     };
 
     return paginatedOrders;
+  }
+
+  private findRentalOrder(id: number): Promise<RentalOrder> {
+    return this.rentalOrderRepository.findOne({ id });
   }
 }
