@@ -1,14 +1,18 @@
+import { PurchaseOrderRepository } from '../repositories/purchase-order.repository';
 import { Module } from '@nestjs/common';
 import { RentalOrdersController } from './rental-orders/rental-orders.controller';
 import { RentalOrdersService } from './rental-orders/rental-orders.service';
-import { MoviesModule } from 'src/movies/movies.module';
 import { MoviesService } from 'src/movies/movies.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RentalOrderRepository } from './repositories/rental-order.repository';
-import { MovieRepository } from 'src/movies/repositories/movie.repository';
+import { RentalOrderRepository } from '../repositories/rental-order.repository';
+import { MovieRepository } from 'src/repositories/movie.repository';
 import { PassportModule } from '@nestjs/passport';
-import { ReturnOrderRepository } from './repositories/return-order.repository';
-import { MovieAttachmentRepository } from 'src/movies/repositories/movie-attachment.repository';
+import { ReturnOrderRepository } from '../repositories/return-order.repository';
+import { MovieAttachmentRepository } from 'src/repositories/movie-attachment.repository';
+import { PurchaseOrdersController } from './purchase-orders/purchase-orders.controller';
+import { PurchaseOrdersService } from './purchase-orders/purchase-orders.service';
+import { MovieImageMapper } from 'src/shared/mappers/movie-image.mapper';
+import { VoteRepository } from 'src/repositories/votes.repository';
 
 @Module({
   imports: [
@@ -16,11 +20,18 @@ import { MovieAttachmentRepository } from 'src/movies/repositories/movie-attachm
     TypeOrmModule.forFeature([
       RentalOrderRepository,
       ReturnOrderRepository,
+      PurchaseOrderRepository,
       MovieRepository,
       MovieAttachmentRepository,
+      VoteRepository,
     ]),
   ],
-  controllers: [RentalOrdersController],
-  providers: [RentalOrdersService, MoviesService],
+  controllers: [RentalOrdersController, PurchaseOrdersController],
+  providers: [
+    RentalOrdersService,
+    MoviesService,
+    PurchaseOrdersService,
+    MovieImageMapper,
+  ],
 })
 export class OrderModule {}
