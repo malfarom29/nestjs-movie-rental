@@ -1,5 +1,10 @@
 import { EmailService } from '../config/email/email.service';
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  UnauthorizedException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../repositories/user.repository';
 import { UserRegistrationDto } from 'src/user/dto/user-registration.dto';
@@ -9,6 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthRepository } from '../repositories/auth.repository';
 import { Auth } from '../database/entities/auth.entity';
 import * as fs from 'fs';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -24,14 +30,13 @@ export class AuthService {
 
   async signUp(userRegistrationDto: UserRegistrationDto): Promise<void> {
     const user = await this.userRepository.signUp(userRegistrationDto);
-    const template = fs.readFileSync(
-      `${__dirname}/../../src/shared/email-templates/new-user-template.html`,
-    );
-    this.emailService.sendEmail(
-      user.email,
-      'Welcome!',
-      this.replaceNamePlaceholder(template, user.firstName),
-    );
+    const template = fs
+      .readFileSync(
+        `${__dirname}/../../src/shared/email-templates/new-user-template.html`,
+      )
+      .toString();
+    const body = this.replaceNamePlaceholder(template, user.firstName);
+    this.emailService.sendEmail(user.email, 'Welcome!', body);
     return;
   }
 
@@ -49,7 +54,50 @@ export class AuthService {
     return await this.authRepository.signIn(accessToken, userId);
   }
 
-  private replaceNamePlaceholder(template: Buffer, name: string): string {
+  async requestResetPassword(email: string): Promise<void> {
+    const user = await this.userRepository.findOne({ email });
+    if (!user) {
+      return;
+    }
+
+    const resetPasswordTokenExpiresIn = new Date();
+    resetPasswordTokenExpiresIn.setDate(
+      resetPasswordTokenExpiresIn.getDate() + 1,
+    );
+
+    const resetPasswordToken = crypto.randomBytes(16).toString('hex');
+
+    const template = fs
+      .readFileSync(
+        `${__dirname}/../../src/shared/email-templates/reset-password-template.html`,
+      )
+      .toString();
+    let body = this.replaceNamePlaceholder(template, user.firstName);
+    body = this.replaceTokenPlaceholder(body, resetPasswordToken);
+
+    try {
+      await this.userRepository.save({
+        id: user.id,
+        resetPasswordToken,
+        resetPasswordTokenExpiresIn,
+      });
+
+      this.emailService.sendEmail(user.email, 'Request Reset Password', body);
+    } catch (error) {
+      this.logger.error(error.stack);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<void> {
+    return this.userRepository.resetPassword(token, newPassword);
+  }
+
+  private replaceNamePlaceholder(template: string, name: string): string {
     return template.toString().replace('$name', name);
+  }
+
+  private replaceTokenPlaceholder(template: string, token: string): string {
+    return template.toString().replace('$resetToken', token);
   }
 }
