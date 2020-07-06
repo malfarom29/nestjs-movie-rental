@@ -5,13 +5,13 @@ import {
   InternalServerErrorException,
   ConflictException,
 } from '@nestjs/common';
-import { RentalOrderDto } from '../order/rental-orders/dto/response/rental-order.dto';
+import { RentalOrder } from 'src/database/entities';
 
 @EntityRepository(ReturnOrder)
 export class ReturnOrderRepository extends Repository<ReturnOrder> {
   private readonly logger = new Logger();
 
-  async returnMovie(rentalOrder: RentalOrderDto): Promise<ReturnOrder> {
+  async returnMovie(rentalOrder: RentalOrder): Promise<ReturnOrder> {
     const rentalReturn = this.create();
     const moviePenalty = rentalOrder.movie.dailyPenalty;
     const today = new Date('2020-07-16');
