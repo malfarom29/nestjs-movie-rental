@@ -99,6 +99,26 @@ export class UserRepository extends Repository<User> {
     }
   }
 
+  async changeUserRoles(id: number, roles: string[]): Promise<User> {
+    const user = await this.findOne({ id });
+    const mappedRoles = await Promise.all(
+      roles.map(async role => {
+        const found = await Role.findOne({ label: role });
+        return found;
+      }),
+    );
+
+    user.roles = mappedRoles;
+
+    try {
+      await user.save();
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+
+    return user;
+  }
+
   private async hashPassword(password: string, salt: string): Promise<string> {
     return bcrypt.hash(password, salt);
   }
