@@ -1,4 +1,4 @@
-import { MovieResponseDto } from '../../dtos/response/movie-response.dto';
+import { MovieResponseDto } from '../dtos/response/movie-response.dto';
 import { Movie } from 'src/database/entities';
 import { Injectable } from '@nestjs/common';
 import * as aws from '../../config/aws/utils';
