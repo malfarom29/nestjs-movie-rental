@@ -6,7 +6,7 @@
 [travis-url]: https://travis-ci.org/nestjs/nest
 [linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
 [linux-url]: https://travis-ci.org/nestjs/nest
-  
+
   <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
     <p align="center">
 <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
@@ -32,6 +32,49 @@
 
 ```bash
 $ npm install
+```
+
+## Set ENV variables
+
+```
+TYPEORM_CONNECTION=
+TYPEORM_HOST=
+TYPEORM_USERNAME=
+TYPEORM_PASSWORD=
+TYPEORM_DATABASE=
+TYPEORM_PORT=
+TYPEORM_SYNCHRONIZE=
+TYPEORM_LOGGING=
+TYPEORM_ENTITIES=
+TYPEORM_MIGRATIONS=
+TYPEORM_SEEDING_SEEDS=
+TYPEORM_SEEDING_FACTORIES=
+TYPEORM_SUBSCRIBERS=
+TYPEORM_ENTITIES_DIR=
+TYPEORM_MIGRATIONS_DIR=
+TYPEORM_MIGRATIONS_RUN=
+
+MAILER_HOST=
+MAILER_PORT=
+MAILER_USER=
+MAILER_PASSWORD=
+
+AWS_ACCESS_KEY_ID=
+AWS_ACCESS_KEY_SECRET=
+AWS_BUCKET=
+
+JWT_SECRET=
+JWT_EXPIRATION_TIME=
+```
+
+## Running Migrations and Database Seeding
+
+First, you should create the schema on your postgres, then run the following commands
+
+```
+$ npm run migration:run
+
+$ npm run migration:seed
 ```
 
 ## Running the app
@@ -72,4 +115,4 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## License
 
-  Nest is [MIT licensed](LICENSE).
+Nest is [MIT licensed](LICENSE).
