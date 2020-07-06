@@ -6,7 +6,7 @@ import {
   InternalServerErrorException,
   BadRequestException,
 } from '@nestjs/common';
-import { PaginationDto } from 'src/dtos/request/pagination.dto';
+import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 
 @EntityRepository(RentalOrder)
 export class RentalOrderRepository extends Repository<RentalOrder> {
@@ -15,23 +15,21 @@ export class RentalOrderRepository extends Repository<RentalOrder> {
   async getMyRentalOrders(
     userId: number,
     paginationDto: PaginationDto,
-  ): Promise<[RentalOrder[], number]> {
-    const query = this.createQueryBuilder('rental_order').where({
-      userId: userId,
-    });
-    const page = paginationDto.page;
-    const limit = paginationDto.limit ? paginationDto.limit : 10;
+  ): Promise<{ data: RentalOrder[]; totalCount: number }> {
+    const page = paginationDto.page || 1;
+    const limit = paginationDto.limit || 10;
+    const skip = (page - 1) * limit;
+    const query = this.createQueryBuilder('rental_order').leftJoinAndSelect(
+      'rental_order.movie',
+      'movie',
+    );
 
-    if (page) {
-      const skippedItems = (page - 1) * limit;
-      query.offset(skippedItems);
-    }
+    query.where({ userId });
+    query.take(limit).skip(skip);
 
-    query.limit(limit);
+    const [rentalOrders, total] = await query.getManyAndCount();
 
-    const data = query.getManyAndCount();
-
-    return data;
+    return { data: rentalOrders, totalCount: total };
   }
 
   async rentMovie(
