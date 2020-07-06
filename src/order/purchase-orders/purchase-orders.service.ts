@@ -7,25 +7,25 @@ import {
   ConflictException,
   BadRequestException,
 } from '@nestjs/common';
-import { PaginationDto } from 'src/dtos/request/pagination.dto';
-import { PaginatedDataDto } from 'src/dtos/response/paginated-data.dto';
+import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
+import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { plainToClass } from 'class-transformer';
-import { PurchaseResponseDto } from 'src/dtos/response/purchase-response.dto';
-import { OrderResponseDto } from 'src/dtos/response/order-response.dto';
+import { PurchaseResponseDto } from 'src/shared/dtos/response/purchase-response.dto';
+import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
 import { OrderSerializer } from 'src/shared/serializers/order-serializer';
+import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
 
 @Injectable()
 export class PurchaseOrdersService {
-  private serializer: OrderSerializer;
+  private readonly serializer = new OrderSerializer();
+  private readonly paginationSerializer = new PaginatedSerializer();
 
   constructor(
     @InjectRepository(PurchaseOrderRepository)
     private purchaseOrderRepository: PurchaseOrderRepository,
     private moviesService: MoviesService,
-  ) {
-    this.serializer = new OrderSerializer();
-  }
+  ) {}
 
   async purchaseMovie(
     id: number,
@@ -64,18 +64,29 @@ export class PurchaseOrdersService {
   async getMyPurchaseOrders(
     user: AuthorizedUser,
     paginationDto: PaginationDto,
-  ): Promise<PaginatedDataDto<PurchaseOrder>> {
-    const data = await this.purchaseOrderRepository.getMyPurchaseOrders(
+  ): Promise<PaginatedDataDto<OrderResponseDto<PurchaseResponseDto>[]>> {
+    const {
+      data,
+      totalCount,
+    } = await this.purchaseOrderRepository.getMyPurchaseOrders(
       user.userId,
       paginationDto,
     );
-    const paginatedOrders: PaginatedDataDto<PurchaseOrder> = {
-      data: data[0],
-      totalCount: data[1],
-      page: paginationDto.page ? Number(paginationDto.page) : 1,
-      limit: paginationDto.limit ? Number(paginationDto.limit) : 10,
-    };
+    const page = Number(paginationDto.page) || 1;
+    const limit = Number(paginationDto.limit) || 10;
 
-    return paginatedOrders;
+    const purchases: OrderResponseDto<PurchaseResponseDto>[] = data.map(
+      order => {
+        const dto = plainToClass(PurchaseResponseDto, order);
+        return this.serializer.serialize<PurchaseResponseDto>(dto, order.movie);
+      },
+    );
+
+    return this.paginationSerializer.serialize(
+      purchases,
+      totalCount,
+      page,
+      limit,
+    );
   }
 }

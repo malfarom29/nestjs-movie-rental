@@ -9,26 +9,26 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RentalOrderRepository } from '../../repositories/rental-order.repository';
 import { MoviesService } from 'src/movies/movies.service';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
-import { RentalOrderDto } from '../../dtos/response/rental-order.dto';
+import { RentalOrderDto } from '../../shared/dtos/response/rental-order.dto';
 import { plainToClass } from 'class-transformer';
 import { ReturnOrderRepository } from '../../repositories/return-order.repository';
-import { PaginationDto } from 'src/dtos/request/pagination.dto';
-import { PaginatedDataDto } from 'src/dtos/response/paginated-data.dto';
-import { OrderResponseDto } from 'src/dtos/response/order-response.dto';
-import { ReturnOrderResponseDto } from 'src/dtos/response/return-order-response.dto';
+import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
+import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
+import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
+import { ReturnOrderResponseDto } from 'src/shared/dtos/response/return-order-response.dto';
+import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
 
 @Injectable()
 export class RentalOrdersService {
-  private serializer: OrderSerializer;
+  private readonly serializer = new OrderSerializer();
+  private readonly paginationSerializer = new PaginatedSerializer();
   constructor(
     @InjectRepository(RentalOrderRepository)
     private rentalOrderRepository: RentalOrderRepository,
     @InjectRepository(ReturnOrderRepository)
     private returnOrderRepository: ReturnOrderRepository,
     private moviesService: MoviesService,
-  ) {
-    this.serializer = new OrderSerializer();
-  }
+  ) {}
 
   async getRentalOrderById(id: number): Promise<RentalOrderDto> {
     const rental = await this.rentalOrderRepository.findOne(
@@ -100,19 +100,29 @@ export class RentalOrdersService {
   async getMyRentalOrders(
     user: AuthorizedUser,
     paginationDto: PaginationDto,
-  ): Promise<PaginatedDataDto<RentalOrder>> {
-    const data = await this.rentalOrderRepository.getMyRentalOrders(
+  ): Promise<PaginatedDataDto<OrderResponseDto<RentalOrderDto>[]>> {
+    const {
+      data,
+      totalCount,
+    } = await this.rentalOrderRepository.getMyRentalOrders(
       user.userId,
       paginationDto,
     );
-    const paginatedOrders: PaginatedDataDto<RentalOrder> = {
-      data: data[0],
-      totalCount: data[1],
-      page: paginationDto.page ? Number(paginationDto.page) : 1,
-      limit: paginationDto.limit ? Number(paginationDto.limit) : 10,
-    };
 
-    return paginatedOrders;
+    const page = Number(paginationDto.page) || 1;
+    const limit = Number(paginationDto.limit) || 10;
+
+    const rentals: OrderResponseDto<RentalOrderDto>[] = data.map(order => {
+      const dto = plainToClass(RentalOrderDto, order);
+      return this.serializer.serialize<RentalOrderDto>(dto, order.movie);
+    });
+
+    return this.paginationSerializer.serialize(
+      rentals,
+      totalCount,
+      page,
+      limit,
+    );
   }
 
   private findRentalOrder(id: number): Promise<RentalOrder> {
