@@ -1,8 +1,8 @@
 import { nanoid } from 'nanoid';
 import { awsS3 } from './aws-sdk.config';
-import * as config from 'config';
+require('dotenv').config();
 
-const awsConfig = config.get('aws');
+const bucket = process.env.AWS_BUCKET;
 
 export const uploadSignedUrl = async (
   fileType: string,
@@ -15,7 +15,7 @@ export const uploadSignedUrl = async (
 }> => {
   const key = `${nanoid()}.${fileType}`;
   const params = {
-    Bucket: awsConfig.bucket,
+    Bucket: bucket,
     Key: key,
     Expires: 120,
     ContentType: mimeType,
@@ -28,7 +28,7 @@ export const uploadSignedUrl = async (
 
 export const downloadSignedUrl = async (key: string): Promise<string> => {
   const params = {
-    Bucket: awsConfig.bucket,
+    Bucket: bucket,
     Key: key,
     Expires: 120,
   };

@@ -1,14 +1,12 @@
 import Mail from 'nodemailer/lib/mailer';
 import * as nodemailer from 'nodemailer';
-import * as config from 'config';
-
-const emailConfig = config.get('mailer');
+require('dotenv').config();
 
 export const transporter: Mail = nodemailer.createTransport({
-  host: process.env.MAILER_HOST || emailConfig.host,
-  port: process.env.MAILER_PORT || emailConfig.port,
+  host: process.env.MAILER_HOST,
+  port: Number(process.env.MAILER_PORT),
   auth: {
-    user: process.env.MAILER_USER || emailConfig.user,
-    pass: process.env.MAILER_PASSWORD || emailConfig.password,
+    user: process.env.MAILER_USER,
+    pass: process.env.MAILER_PASSWORD,
   },
 });

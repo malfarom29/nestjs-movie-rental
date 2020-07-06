@@ -7,19 +7,17 @@ import { UserRepository } from 'src/repositories/user.repository';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
-import * as config from 'config';
 import { AuthRepository } from '../repositories/auth.repository';
-
-const jwtConfig = config.get('jwt');
+require('dotenv').config();
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     TypeOrmModule.forFeature([UserRepository, AuthRepository]),
     JwtModule.register({
-      secret: process.env.JWT_SECRET || jwtConfig.secret,
+      secret: process.env.JWT_SECRET,
       signOptions: {
-        expiresIn: jwtConfig.expiresIn,
+        expiresIn: process.env.JWT_EXPIRATION_TIME,
       },
     }),
   ],
