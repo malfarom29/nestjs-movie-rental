@@ -1,12 +1,18 @@
 import { UserRoles } from '../shared/constants';
-import { EntityRepository, Repository, SelectQueryBuilder } from 'typeorm';
-import { Movie } from '../database/entities';
+import {
+  EntityRepository,
+  Repository,
+  SelectQueryBuilder,
+  getConnection,
+} from 'typeorm';
+import { Movie, MovieLog } from '../database/entities';
 import { CreateMovieDto } from '../movies/dto/create-movie.dto';
 import { InternalServerErrorException } from '@nestjs/common';
 import { PaginationDto } from '../dtos/request/pagination.dto';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { FilterDto } from 'src/dtos/request/filter.dto';
 import { MovieFilterDto } from 'src/dtos/request/filters/movie-filter.dto';
+import { UpdateMovieDto } from 'src/movies/dto/update-movie.dto';
 
 @EntityRepository(Movie)
 export class MovieRepository extends Repository<Movie> {
@@ -65,6 +71,21 @@ export class MovieRepository extends Repository<Movie> {
     }
 
     return movie;
+  }
+
+  async updateMovie(id: number, updateMovieDto: UpdateMovieDto): Promise<void> {
+    const currentMovie = await this.findOne({ id });
+    if (currentMovie.stock !== updateMovieDto.stock) {
+      const movieId = currentMovie.id;
+      delete currentMovie.id;
+      getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(MovieLog)
+        .values({ ...currentMovie, movieId })
+        .execute();
+    }
+    await this.update(id, updateMovieDto);
   }
 
   private filterMovies(
