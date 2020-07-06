@@ -11,6 +11,9 @@ export class UserRegistrationDto {
   lastName: string;
 
   @IsString()
+  email: string;
+
+  @IsString()
   @MinLength(8)
   @MaxLength(20)
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
