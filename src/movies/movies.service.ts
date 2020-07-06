@@ -2,23 +2,28 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MovieRepository } from '../repositories/movie.repository';
-import { PaginationDto } from '../dtos/request/pagination.dto';
-import { PaginatedDataDto } from '../dtos/response/paginated-data.dto';
-import { MovieAttachmentRepository } from '../repositories/movie-attachment.repository';
+import { PaginationDto } from '../shared/dtos/request/pagination.dto';
+import { PaginatedDataDto } from '../shared/dtos/response/paginated-data.dto';
 import { plainToClass, plainToClassFromExist } from 'class-transformer';
 import * as aws from '../config/aws/utils';
 import { Movie } from 'src/database/entities';
-import { MovieResponseDto } from 'src/dtos/response/movie-response.dto';
+import { MovieResponseDto } from 'src/shared/dtos/response/movie-response.dto';
 import * as _ from 'lodash';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { MovieImageMapper } from 'src/shared/mappers/movie-image.mapper';
 import { VoteRepository } from 'src/repositories/votes.repository';
-import { FilterDto } from 'src/dtos/request/filter.dto';
-import { MovieFilterDto } from 'src/dtos/request/filters/movie-filter.dto';
+import { FilterDto } from 'src/shared/dtos/request/filter.dto';
+import { MovieFilterDto } from 'src/shared/dtos/request/filters/movie-filter.dto';
+import { MovieSerializer } from 'src/shared/serializers/movie-serializer';
+import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
 
 @Injectable()
 export class MoviesService {
   private readonly logger = new Logger();
+  private readonly movieSerializer = new MovieSerializer();
+  private readonly paginationSerializer = new PaginatedSerializer<
+    MovieResponseDto
+  >();
   constructor(
     @InjectRepository(MovieRepository)
     private movieRepository: MovieRepository,
@@ -31,27 +36,24 @@ export class MoviesService {
     paginationDto: PaginationDto,
     filterDto: FilterDto<MovieFilterDto>,
     user: AuthorizedUser,
-  ): Promise<PaginatedDataDto<MovieResponseDto>> {
+  ): Promise<PaginatedDataDto<MovieResponseDto[]>> {
     const { data, totalCount } = await this.movieRepository.getMovies(
       paginationDto,
       filterDto,
       user,
     );
+    const page = Number(paginationDto.page) || 1;
+    const limit = Number(paginationDto.limit) || 10;
 
-    const mappedMovied = await this.movieImageMapper.toDto(data, user.roles);
+    const mappedMovies = await this.movieImageMapper.toDto(data, user.roles);
 
-    const paginatedDataDto = plainToClassFromExist(
-      new PaginatedDataDto<MovieResponseDto>(),
-      {
-        data: mappedMovied,
-        totalCount: totalCount,
-        page: Number(paginationDto.page) || 1,
-        limit: Number(paginationDto.limit) || 10,
-      },
-      { groups: user.roles },
+    return this.paginationSerializer.serialize(
+      mappedMovies,
+      totalCount,
+      page,
+      limit,
+      user.roles,
     );
-
-    return paginatedDataDto;
   }
 
   async getMovieById(
@@ -72,16 +74,7 @@ export class MoviesService {
       signedUrl = await aws.downloadSignedUrl(movie.image.key);
     }
 
-    return plainToClass(
-      MovieResponseDto,
-      {
-        ...movie,
-        imageUrl: signedUrl || null,
-      },
-      {
-        groups: user.roles,
-      },
-    );
+    return this.movieSerializer.serialize(movie, signedUrl, user.roles);
   }
 
   async likeAMovie(movieId: number, user: AuthorizedUser): Promise<void> {
