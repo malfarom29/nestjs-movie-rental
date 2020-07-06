@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  Logger,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { CreateMovieDto } from 'src/movies/dto/create-movie.dto';
 import { Movie } from 'src/database/entities';
 import { UpdateMovieDto } from 'src/movies/dto/update-movie.dto';
@@ -41,10 +36,8 @@ export class MoviesService {
     id: number,
     updateMovieDto: UpdateMovieDto,
   ): Promise<Movie> {
-    await this.movieRepository.update(id, updateMovieDto);
-
+    await this.movieRepository.updateMovie(id, updateMovieDto);
     const movie = await this.getMovieById(id);
-
     return movie;
   }
 
