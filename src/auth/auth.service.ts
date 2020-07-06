@@ -15,6 +15,8 @@ import { AuthRepository } from '../repositories/auth.repository';
 import { Auth } from '../database/entities/auth.entity';
 import * as fs from 'fs';
 import * as crypto from 'crypto';
+import { Request } from 'express';
+import { DeleteResult } from 'typeorm';
 
 @Injectable()
 export class AuthService {
@@ -91,6 +93,13 @@ export class AuthService {
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
     return this.userRepository.resetPassword(token, newPassword);
+  }
+
+  async logout(request: Request): Promise<void> {
+    const { headers } = request;
+    const token = headers.authorization.split(' ')[1];
+
+    this.authRepository.delete({ accessToken: token });
   }
 
   private replaceNamePlaceholder(template: string, name: string): string {
