@@ -16,12 +16,12 @@ import { RentalOrdersService } from './rental-orders.service';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { DayFromNowValidationPipe } from '../../shared/pipes/day-from-now-validation.pipe';
-import { RentalOrderDto } from '../../dtos/response/rental-order.dto';
-import { PaginatedDataDto } from 'src/dtos/response/paginated-data.dto';
+import { RentalOrderDto } from '../../shared/dtos/response/rental-order.dto';
+import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
 import { RentalOrder } from 'src/database/entities';
-import { PaginationDto } from 'src/dtos/request/pagination.dto';
-import { OrderResponseDto } from 'src/dtos/response/order-response.dto';
-import { ReturnOrderResponseDto } from 'src/dtos/response/return-order-response.dto';
+import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
+import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
+import { ReturnOrderResponseDto } from 'src/shared/dtos/response/return-order-response.dto';
 
 @Controller('rental-orders')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -56,7 +56,7 @@ export class RentalOrdersController {
   getMyRentalOrders(
     @Query() paginationDto: PaginationDto,
     @GetUser() user: AuthorizedUser,
-  ): Promise<PaginatedDataDto<RentalOrder>> {
+  ): Promise<PaginatedDataDto<OrderResponseDto<RentalOrderDto>[]>> {
     return this.rentalOrdersService.getMyRentalOrders(user, paginationDto);
   }
 }

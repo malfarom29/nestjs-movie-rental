@@ -13,15 +13,14 @@ import {
   Body,
   Get,
   Query,
-  Request,
 } from '@nestjs/common';
 import { Roles } from 'src/shared/decorators/roles.decorator';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
-import { PaginationDto } from 'src/dtos/request/pagination.dto';
-import { PaginatedDataDto } from 'src/dtos/response/paginated-data.dto';
+import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
+import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
-import { OrderResponseDto } from 'src/dtos/response/order-response.dto';
-import { PurchaseResponseDto } from 'src/dtos/response/purchase-response.dto';
+import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
+import { PurchaseResponseDto } from 'src/shared/dtos/response/purchase-response.dto';
 
 @Controller('purchase-orders')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -42,7 +41,7 @@ export class PurchaseOrdersController {
   getMyPurchaseOrders(
     @Query() paginationDto: PaginationDto,
     @GetUser() user: AuthorizedUser,
-  ): Promise<PaginatedDataDto<PurchaseOrder>> {
+  ): Promise<PaginatedDataDto<OrderResponseDto<PurchaseResponseDto>[]>> {
     return this.purchaseOrdersService.getMyPurchaseOrders(user, paginationDto);
   }
 }
