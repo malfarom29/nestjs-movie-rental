@@ -40,7 +40,6 @@
     "bcrypt": "^5.0.0",
     "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
-    "config": "^3.3.1",
     "crypto": "^1.0.1",
     "lodash": "^4.17.15",
     "nanoid": "^3.1.10",
