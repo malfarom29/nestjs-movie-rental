@@ -6,6 +6,7 @@ import {
   OneToOne,
   JoinColumn,
   AfterInsert,
+  BeforeInsert,
 } from 'typeorm';
 import { RentalOrder } from './rental-order.entity';
 import { Movie } from 'src/database/entities/movie.entity';
@@ -21,12 +22,17 @@ export class ReturnOrder extends BaseEntity {
   @Column({ type: 'float', default: 0 })
   penalty: number;
 
-  @Column({ type: 'timestamp', default: new Date() })
+  @Column({ type: 'timestamp' })
   createdAt: Date;
 
   @OneToOne(type => RentalOrder)
   @JoinColumn()
   rentalOrder: RentalOrder;
+
+  @BeforeInsert()
+  setCreatedAt(): void {
+    this.createdAt = new Date();
+  }
 
   @AfterInsert()
   async sumsToMovieStock(): Promise<void> {

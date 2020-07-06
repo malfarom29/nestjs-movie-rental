@@ -1,3 +1,4 @@
+import { PurchaseOrder } from './purchase-order.entity';
 import {
   Entity,
   Unique,
@@ -7,13 +8,15 @@ import {
   ManyToMany,
   JoinTable,
   OneToMany,
+  BeforeInsert,
 } from 'typeorm';
 import { Role } from './role.entity';
 import * as bcrypt from 'bcrypt';
 import { Auth } from './auth.entity';
+import { Vote } from './vote.entity';
 
 @Entity()
-@Unique(['username'])
+@Unique(['username', 'email', 'resetPasswordToken'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -28,6 +31,9 @@ export class User extends BaseEntity {
   lastName: string;
 
   @Column()
+  email: string;
+
+  @Column()
   password: string;
 
   @Column()
@@ -37,11 +43,29 @@ export class User extends BaseEntity {
   @JoinTable()
   roles: Role[];
 
+  @Column({ nullable: true })
+  resetPasswordToken: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  resetPasswordTokenExpiresIn: Date;
+
+  @OneToMany(
+    type => PurchaseOrder,
+    purchaseOrder => purchaseOrder.user,
+  )
+  purchaseOrders: PurchaseOrder[];
+
   @OneToMany(
     type => Auth,
     auth => auth.user,
   )
   auths: Auth[];
+
+  @OneToMany(
+    type => Vote,
+    vote => vote.user,
+  )
+  votes: Vote[];
 
   async validatePassword(password: string): Promise<boolean> {
     const hash = await bcrypt.hash(password, this.salt);

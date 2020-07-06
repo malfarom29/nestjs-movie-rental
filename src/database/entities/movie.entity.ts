@@ -7,10 +7,15 @@ import {
   BeforeInsert,
   JoinColumn,
   OneToOne,
+  BeforeUpdate,
+  getConnection,
+  AfterLoad,
 } from 'typeorm';
 import { MovieLog } from './movie-log.entity';
 import { RentalOrder } from 'src/database/entities/rental-order.entity';
 import { MovieAttachment } from './movie-attachment.entity';
+import { PurchaseOrder } from './purchase-order.entity';
+import { Vote } from './vote.entity';
 
 @Entity()
 export class Movie extends BaseEntity {
@@ -44,6 +49,8 @@ export class Movie extends BaseEntity {
   @Column({ nullable: true })
   imageId: number;
 
+  totalVotes: number;
+
   @OneToMany(
     type => MovieLog,
     movieLog => movieLog.movie,
@@ -56,9 +63,21 @@ export class Movie extends BaseEntity {
   )
   rentalOrders: RentalOrder[];
 
+  @OneToMany(
+    type => PurchaseOrder,
+    purchaseOrder => purchaseOrder.movie,
+  )
+  purchaseOrders: PurchaseOrder[];
+
   @OneToOne(type => MovieAttachment)
   @JoinColumn()
   image: MovieAttachment;
+
+  @OneToMany(
+    type => Vote,
+    vote => vote.movie,
+  )
+  votes: Vote[];
 
   @BeforeInsert()
   setDailyPenalty(): void {
@@ -66,11 +85,11 @@ export class Movie extends BaseEntity {
   }
 
   // @BeforeUpdate()
-  // logChanges(): void {
+  // async logChanges(): Promise<void> {
   //   console.log('updating movie...');
   //   delete this.id;
 
-  //   getConnection()
+  //   await getConnection()
   //     .createQueryBuilder()
   //     .insert()
   //     .into(MovieLog)
