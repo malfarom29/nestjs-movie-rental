@@ -20,6 +20,8 @@ import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { PaginationDto } from 'src/dtos/request/pagination.dto';
 import { PaginatedDataDto } from 'src/dtos/response/paginated-data.dto';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
+import { OrderResponseDto } from 'src/dtos/response/order-response.dto';
+import { PurchaseResponseDto } from 'src/dtos/response/purchase-response.dto';
 
 @Controller('purchase-orders')
 @UseGuards(AuthGuard(), RolesGuard)
@@ -32,7 +34,7 @@ export class PurchaseOrdersController {
     @Body('quantity', ParseIntPipe) quantity: number,
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: AuthorizedUser,
-  ): Promise<PurchaseOrder> {
+  ): Promise<OrderResponseDto<PurchaseResponseDto>> {
     return this.purchaseOrdersService.purchaseMovie(id, quantity, user);
   }
 
