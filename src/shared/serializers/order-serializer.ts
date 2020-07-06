@@ -1,12 +1,14 @@
 import { ReturnOrder } from './../../database/entities/return-order.entity';
-import { RentalOrderDto } from 'src/dtos/response/rental-order.dto';
+import { RentalOrderDto } from 'src/shared/dtos/response/rental-order.dto';
 import { plainToClass, plainToClassFromExist } from 'class-transformer';
 import { Movie } from 'src/database/entities';
-import { ReturnOrderResponseDto } from 'src/dtos/response/return-order-response.dto';
-import { MovieResponseDto } from 'src/dtos/response/movie-response.dto';
-import { OrderResponseDto } from 'src/dtos/response/order-response.dto';
+import { ReturnOrderResponseDto } from 'src/shared/dtos/response/return-order-response.dto';
+import { MovieResponseDto } from 'src/shared/dtos/response/movie-response.dto';
+import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
+import { SerializerDto } from './serializer-dto';
 
-export class OrderSerializer {
+export class OrderSerializer
+  implements SerializerDto<ReturnOrderResponseDto, RentalOrderDto> {
   serialize<V>(orderToSerialize: V, movie: Movie): OrderResponseDto<V> {
     return plainToClassFromExist(new OrderResponseDto<V>(), {
       order: orderToSerialize,

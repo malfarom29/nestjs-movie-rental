@@ -3,7 +3,6 @@ import { Strategy, ExtractJwt } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from 'src/repositories/user.repository';
-import * as config from 'config';
 import { JwtPayload } from './jwt-payload.interface';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 require('dotenv').config();

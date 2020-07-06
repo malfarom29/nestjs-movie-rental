@@ -12,7 +12,7 @@ import { AuthCredentialsDto } from 'src/auth/dto/auth-credentials.dto';
 import { Role } from '../database/entities';
 import { User } from '../database/entities';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
-import { PaginationDto } from 'src/dtos/request/pagination.dto';
+import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {

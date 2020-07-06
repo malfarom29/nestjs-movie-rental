@@ -1,8 +1,8 @@
-import { MovieAttachment } from '../../database/entities/movie-attachment.entity';
-import { UserRoles } from '../../shared/constants';
+import { MovieAttachment } from '../../../database/entities/movie-attachment.entity';
+import { UserRoles } from '../../constants';
 import { Exclude, Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import * as aws from '../../config/aws/utils';
+import * as aws from '../../../config/aws/utils';
 
 @Exclude()
 export class MovieResponseDto {
