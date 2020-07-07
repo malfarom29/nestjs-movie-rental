@@ -12,7 +12,7 @@ import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 export class RentalOrderRepository extends Repository<RentalOrder> {
   private readonly logger = new Logger();
 
-  async getMyRentalOrders(
+  async getUserRentalOrders(
     userId: number,
     paginationDto: PaginationDto,
   ): Promise<{ data: RentalOrder[]; totalCount: number }> {
