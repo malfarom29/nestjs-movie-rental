@@ -35,24 +35,21 @@ export class MoviesService {
   async getMovies(
     paginationDto: PaginationDto,
     filterDto: FilterDto<MovieFilterDto>,
-    user: AuthorizedUser,
   ): Promise<PaginatedDataDto<MovieResponseDto[]>> {
     const { data, totalCount } = await this.movieRepository.getMovies(
       paginationDto,
       filterDto,
-      user,
     );
     const page = Number(paginationDto.page) || 1;
     const limit = Number(paginationDto.limit) || 10;
 
-    const mappedMovies = await this.movieImageMapper.toDto(data, user.roles);
+    const mappedMovies = await this.movieImageMapper.toDto(data);
 
     return this.paginationSerializer.serialize(
       mappedMovies,
       totalCount,
       page,
       limit,
-      user.roles,
     );
   }
 
