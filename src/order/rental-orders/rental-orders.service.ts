@@ -97,15 +97,15 @@ export class RentalOrdersService {
     return this.serializer.serializeWithRentalOrder(returnOrder);
   }
 
-  async getMyRentalOrders(
-    user: AuthorizedUser,
+  async getUserRentalOrders(
+    userId: number,
     paginationDto: PaginationDto,
   ): Promise<PaginatedDataDto<OrderResponseDto<RentalOrderDto>[]>> {
     const {
       data,
       totalCount,
-    } = await this.rentalOrderRepository.getMyRentalOrders(
-      user.userId,
+    } = await this.rentalOrderRepository.getUserRentalOrders(
+      userId,
       paginationDto,
     );
 
