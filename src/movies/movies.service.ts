@@ -19,17 +19,14 @@ import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer
 
 @Injectable()
 export class MoviesService {
-  private readonly logger = new Logger();
-  private readonly movieSerializer = new MovieSerializer();
-  private readonly paginationSerializer = new PaginatedSerializer<
-    MovieResponseDto
-  >();
   constructor(
     @InjectRepository(MovieRepository)
     private movieRepository: MovieRepository,
     @InjectRepository(VoteRepository)
     private voteRepository: VoteRepository,
     private movieImageMapper: MovieImageMapper,
+    private movieSerializer: MovieSerializer,
+    private paginationSerializer: PaginatedSerializer<MovieResponseDto>,
   ) {}
 
   async getMovies(

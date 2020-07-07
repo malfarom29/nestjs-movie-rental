@@ -11,12 +11,16 @@ import { UserRepository } from 'src/repositories/user.repository';
 import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 import { UserResponseDto } from 'src/shared/dtos/response/user-response.dto';
 import { plainToClass, plainToClassFromExist } from 'class-transformer';
+import { UserSerializer } from 'src/shared/serializers/user-serializer';
+import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
+    private serializer: UserSerializer,
+    private paginationSerializer: PaginatedSerializer<UserResponseDto>,
   ) {}
 
   async getAllUsers(
@@ -28,14 +32,9 @@ export class UserService {
     const page = paginationDto.page || 1;
     const limit = paginationDto.limit || 10;
 
-    const users = plainToClass(UserResponseDto, data);
+    const users = this.serializer.serialize(data);
 
-    return plainToClassFromExist(new PaginatedDataDto<UserResponseDto>(), {
-      data: users,
-      totalCount,
-      page,
-      limit,
-    });
+    return this.paginationSerializer.serialize(users, totalCount, page, limit);
   }
 
   async getUserById(id: number): Promise<UserResponseDto> {

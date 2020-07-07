@@ -20,14 +20,14 @@ import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer
 
 @Injectable()
 export class RentalOrdersService {
-  private readonly serializer = new OrderSerializer();
-  private readonly paginationSerializer = new PaginatedSerializer();
   constructor(
     @InjectRepository(RentalOrderRepository)
     private rentalOrderRepository: RentalOrderRepository,
     @InjectRepository(ReturnOrderRepository)
     private returnOrderRepository: ReturnOrderRepository,
     private moviesService: MoviesService,
+    private serializer: OrderSerializer,
+    private paginationSerializer: PaginatedSerializer<RentalOrderDto>,
   ) {}
 
   async getRentalOrderById(id: number): Promise<RentalOrderDto> {

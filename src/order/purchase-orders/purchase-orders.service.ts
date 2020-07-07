@@ -17,13 +17,12 @@ import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer
 
 @Injectable()
 export class PurchaseOrdersService {
-  private readonly serializer = new OrderSerializer();
-  private readonly paginationSerializer = new PaginatedSerializer();
-
   constructor(
     @InjectRepository(PurchaseOrderRepository)
     private purchaseOrderRepository: PurchaseOrderRepository,
     private moviesService: MoviesService,
+    private serializer: OrderSerializer,
+    private paginationSerializer: PaginatedSerializer<PurchaseResponseDto>,
   ) {}
 
   async purchaseMovie(

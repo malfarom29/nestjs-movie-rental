@@ -18,17 +18,15 @@ import { AdminMovieImageMapper } from 'src/shared/mappers/admin-movie-image.mapp
 
 @Injectable()
 export class MoviesService {
-  private readonly logger = new Logger();
-  private readonly movieSerializer = new MovieSerializer();
-  private readonly paginationSerializer = new PaginatedSerializer<
-    MovieAdminResponseDto
-  >();
   constructor(
     @InjectRepository(MovieRepository)
     private movieRepository: MovieRepository,
     @InjectRepository(MovieAttachmentRepository)
     private movieAttachmentRepository: MovieAttachmentRepository,
     private movieImageMapper: AdminMovieImageMapper,
+    private movieSerializer: MovieSerializer,
+    private paginationSerializer: PaginatedSerializer<MovieAdminResponseDto>,
+    private logger: Logger,
   ) {}
 
   async getMovieById(id: number): Promise<Movie> {
