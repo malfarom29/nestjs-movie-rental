@@ -1,10 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { RentalOrder } from '../database/entities';
+import { RentalOrder, User } from '../database/entities';
 import { Movie } from 'src/database/entities';
 import {
   Logger,
   InternalServerErrorException,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 
@@ -16,6 +17,11 @@ export class RentalOrderRepository extends Repository<RentalOrder> {
     userId: number,
     paginationDto: PaginationDto,
   ): Promise<{ data: RentalOrder[]; totalCount: number }> {
+    const user = await User.findOne({ id: userId });
+    if (!user) {
+      throw new NotFoundException(`User with ID "${userId}" not found`);
+    }
+
     const page = paginationDto.page || 1;
     const limit = paginationDto.limit || 10;
     const skip = (page - 1) * limit;
