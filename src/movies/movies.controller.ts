@@ -1,3 +1,4 @@
+import { UserRoles } from './../shared/constants';
 import { RolesGuard } from './../shared/guards/roles.guard';
 import {
   Controller,
@@ -16,13 +17,13 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { Roles } from 'src/shared/decorators/roles.decorator';
-import { OptionalAuthGuard } from 'src/shared/guards/optional-auth.guard';
 import { AuthGuard } from '@nestjs/passport';
 import { FilterDto } from 'src/shared/dtos/request/filter.dto';
 import { MovieFilterDto } from 'src/shared/dtos/request/filters/movie-filter.dto';
+import { WhitelistTokenGuard } from 'src/shared/guards/whitelist-token.guard';
 
 @Controller('movies')
-@UseGuards(OptionalAuthGuard, RolesGuard)
+@UseGuards(RolesGuard)
 @Roles()
 export class MoviesController {
   constructor(private moviesService: MoviesService) {}
@@ -31,9 +32,8 @@ export class MoviesController {
   getMovies(
     @Query() paginationDto: PaginationDto,
     @Query() filterDto: FilterDto<MovieFilterDto>,
-    @GetUser() user?: AuthorizedUser,
   ): Promise<PaginatedDataDto<MovieResponseDto[]>> {
-    return this.moviesService.getMovies(paginationDto, filterDto, user);
+    return this.moviesService.getMovies(paginationDto, filterDto);
   }
 
   @ApiTags('movies')
@@ -50,8 +50,9 @@ export class MoviesController {
     return this.moviesService.getMovieById(id, user);
   }
 
+  @ApiTags('movies')
   @Post('/:id/like')
-  @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard(), WhitelistTokenGuard)
   likeAMovie(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: AuthorizedUser,
