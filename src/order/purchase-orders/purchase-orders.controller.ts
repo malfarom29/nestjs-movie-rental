@@ -1,5 +1,3 @@
-import { User } from './../../database/entities/user.entity';
-import { PurchaseOrder } from './../../database/entities';
 import { PurchaseOrdersService } from './purchase-orders.service';
 import { UserRoles } from './../../shared/constants';
 import { RolesGuard } from './../../shared/guards/roles.guard';
@@ -21,9 +19,10 @@ import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
 import { PurchaseResponseDto } from 'src/shared/dtos/response/purchase-response.dto';
+import { WhitelistTokenGuard } from 'src/shared/guards/whitelist-token.guard';
 
 @Controller('purchase-orders')
-@UseGuards(AuthGuard(), RolesGuard)
+@UseGuards(AuthGuard(), WhitelistTokenGuard, RolesGuard)
 @Roles(UserRoles.CUSTOMER)
 export class PurchaseOrdersController {
   constructor(private purchaseOrdersService: PurchaseOrdersService) {}

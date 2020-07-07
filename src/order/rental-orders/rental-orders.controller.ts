@@ -18,13 +18,13 @@ import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface'
 import { DayFromNowValidationPipe } from '../../shared/pipes/day-from-now-validation.pipe';
 import { RentalOrderDto } from '../../shared/dtos/response/rental-order.dto';
 import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
-import { RentalOrder } from 'src/database/entities';
 import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
 import { ReturnOrderResponseDto } from 'src/shared/dtos/response/return-order-response.dto';
+import { WhitelistTokenGuard } from 'src/shared/guards/whitelist-token.guard';
 
 @Controller('rental-orders')
-@UseGuards(AuthGuard(), RolesGuard)
+@UseGuards(AuthGuard(), WhitelistTokenGuard, RolesGuard)
 @Roles(UserRoles.CUSTOMER)
 export class RentalOrdersController {
   constructor(private rentalOrdersService: RentalOrdersService) {}

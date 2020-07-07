@@ -19,9 +19,10 @@ import { UserResponseDto } from 'src/shared/dtos/response/user-response.dto';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { RolesArrayValidatorPipe } from 'src/shared/pipes/roles-array-validator.pipe';
+import { WhitelistTokenGuard } from 'src/shared/guards/whitelist-token.guard';
 
 @Controller('users')
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard(), WhitelistTokenGuard)
 export class UserController {
   constructor(private userService: UserService) {}
 

@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MovieRepository } from 'src/repositories/movie.repository';
 import { PassportModule } from '@nestjs/passport';
 import { MovieAttachmentRepository } from 'src/repositories/movie-attachment.repository';
+import { AdminMovieImageMapper } from 'src/shared/mappers/admin-movie-image.mapper';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { MovieAttachmentRepository } from 'src/repositories/movie-attachment.rep
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [MoviesController],
-  providers: [MoviesService],
+  providers: [MoviesService, AdminMovieImageMapper],
 })
 export class AdminModule {}
