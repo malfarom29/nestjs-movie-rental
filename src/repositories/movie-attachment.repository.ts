@@ -5,7 +5,10 @@ import { Logger, InternalServerErrorException } from '@nestjs/common';
 
 @EntityRepository(MovieAttachment)
 export class MovieAttachmentRepository extends Repository<MovieAttachment> {
-  private readonly logger = new Logger();
+  constructor(private logger: Logger) {
+    super();
+  }
+
   async saveSignedUrl(awsData: UploadData): Promise<MovieAttachment> {
     const attachment = new MovieAttachment();
     const { fileType, mimeType, key } = awsData;

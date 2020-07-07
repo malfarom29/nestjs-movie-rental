@@ -3,7 +3,7 @@ import { transporter } from './nodemailer.config';
 
 @Injectable()
 export class EmailService {
-  private logger = new Logger();
+  constructor(private logger: Logger) {}
 
   async sendEmail(
     emailReceiver: string,

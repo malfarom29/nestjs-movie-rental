@@ -16,11 +16,9 @@ import { Auth } from '../database/entities/auth.entity';
 import * as fs from 'fs';
 import * as crypto from 'crypto';
 import { Request } from 'express';
-import { DeleteResult } from 'typeorm';
 
 @Injectable()
 export class AuthService {
-  private logger = new Logger('AuthService');
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
@@ -28,6 +26,7 @@ export class AuthService {
     private authRepository: AuthRepository,
     private emailService: EmailService,
     private jwtService: JwtService,
+    private logger: Logger,
   ) {}
 
   async signUp(userRegistrationDto: UserRegistrationDto): Promise<void> {

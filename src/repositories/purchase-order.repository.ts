@@ -10,7 +10,9 @@ import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 
 @EntityRepository(PurchaseOrder)
 export class PurchaseOrderRepository extends Repository<PurchaseOrder> {
-  private readonly logger = new Logger();
+  constructor(private logger: Logger) {
+    super();
+  }
 
   async purchaseMovie(
     movie: Movie,
