@@ -1,3 +1,4 @@
+import { UserRoles } from './../../shared/constants';
 import {
   Controller,
   UseGuards,
@@ -11,7 +12,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/shared/guards/roles.guard';
 import { Roles } from 'src/shared/decorators/roles.decorator';
-import { UserRoles } from 'src/shared/constants';
 import { RentalOrdersService } from './rental-orders.service';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
@@ -25,11 +25,11 @@ import { WhitelistTokenGuard } from 'src/shared/guards/whitelist-token.guard';
 
 @Controller('rental-orders')
 @UseGuards(AuthGuard(), WhitelistTokenGuard, RolesGuard)
-@Roles(UserRoles.CUSTOMER)
 export class RentalOrdersController {
   constructor(private rentalOrdersService: RentalOrdersService) {}
 
   @Post('/movie/:movieId')
+  @Roles(UserRoles.CUSTOMER)
   rentMovie(
     @Body('toBeReturnedAt', DayFromNowValidationPipe) toBeReturnedAt: Date,
     @Param('movieId') movieId: number,
@@ -39,6 +39,7 @@ export class RentalOrdersController {
   }
 
   @Get('/:id')
+  @Roles(UserRoles.CUSTOMER)
   getRentalOrderById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<RentalOrderDto> {
@@ -46,6 +47,7 @@ export class RentalOrdersController {
   }
 
   @Post('/:id/return')
+  @Roles(UserRoles.CUSTOMER)
   returnMovie(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<OrderResponseDto<ReturnOrderResponseDto>> {
@@ -53,10 +55,23 @@ export class RentalOrdersController {
   }
 
   @Get()
+  @Roles(UserRoles.CUSTOMER)
   getMyRentalOrders(
     @Query() paginationDto: PaginationDto,
     @GetUser() user: AuthorizedUser,
   ): Promise<PaginatedDataDto<OrderResponseDto<RentalOrderDto>[]>> {
-    return this.rentalOrdersService.getMyRentalOrders(user, paginationDto);
+    return this.rentalOrdersService.getUserRentalOrders(
+      user.userId,
+      paginationDto,
+    );
+  }
+
+  @Get('/users/:id')
+  @Roles(UserRoles.ADMIN)
+  getUserRentalOrders(
+    @Param('id', ParseIntPipe) id: number,
+    @Query() paginationDto: PaginationDto,
+  ): Promise<PaginatedDataDto<OrderResponseDto<RentalOrderDto>[]>> {
+    return this.rentalOrdersService.getUserRentalOrders(id, paginationDto);
   }
 }
