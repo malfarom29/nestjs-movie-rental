@@ -1,4 +1,3 @@
-import { PurchaseOrder } from './../../database/entities';
 import { MoviesService } from './../../movies/movies.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PurchaseOrderRepository } from '../../repositories/purchase-order.repository';
@@ -61,15 +60,15 @@ export class PurchaseOrdersService {
     );
   }
 
-  async getMyPurchaseOrders(
-    user: AuthorizedUser,
+  async getUserPurchaseOrders(
+    userId: number,
     paginationDto: PaginationDto,
   ): Promise<PaginatedDataDto<OrderResponseDto<PurchaseResponseDto>[]>> {
     const {
       data,
       totalCount,
-    } = await this.purchaseOrderRepository.getMyPurchaseOrders(
-      user.userId,
+    } = await this.purchaseOrderRepository.getUserPurchaseOrders(
+      userId,
       paginationDto,
     );
     const page = Number(paginationDto.page) || 1;
