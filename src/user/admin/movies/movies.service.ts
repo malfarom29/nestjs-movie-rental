@@ -7,15 +7,28 @@ import { MovieRepository } from 'src/repositories/movie.repository';
 import * as aws from '../../../config/aws/utils';
 import { UploadMovieImageDto } from 'src/movies/dto/upload-movie-image.dto';
 import { MovieAttachmentRepository } from 'src/repositories/movie-attachment.repository';
+import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
+import { FilterDto } from 'src/shared/dtos/request/filter.dto';
+import { MovieFilterDto } from 'src/shared/dtos/request/filters/movie-filter.dto';
+import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
+import { MovieSerializer } from 'src/shared/serializers/movie-serializer';
+import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
+import { MovieAdminResponseDto } from 'src/shared/dtos/response/movie-admin-response.dto';
+import { AdminMovieImageMapper } from 'src/shared/mappers/admin-movie-image.mapper';
 
 @Injectable()
 export class MoviesService {
   private readonly logger = new Logger();
+  private readonly movieSerializer = new MovieSerializer();
+  private readonly paginationSerializer = new PaginatedSerializer<
+    MovieAdminResponseDto
+  >();
   constructor(
     @InjectRepository(MovieRepository)
     private movieRepository: MovieRepository,
     @InjectRepository(MovieAttachmentRepository)
     private movieAttachmentRepository: MovieAttachmentRepository,
+    private movieImageMapper: AdminMovieImageMapper,
   ) {}
 
   async getMovieById(id: number): Promise<Movie> {
@@ -26,6 +39,27 @@ export class MoviesService {
     }
 
     return movie;
+  }
+
+  async getMovies(
+    paginationDto: PaginationDto,
+    filterDto: FilterDto<MovieFilterDto>,
+  ): Promise<PaginatedDataDto<MovieAdminResponseDto[]>> {
+    const { data, totalCount } = await this.movieRepository.getMovies(
+      paginationDto,
+      filterDto,
+    );
+    const page = Number(paginationDto.page) || 1;
+    const limit = Number(paginationDto.limit) || 10;
+
+    const mappedMovies = await this.movieImageMapper.toDto(data);
+
+    return this.paginationSerializer.serialize(
+      mappedMovies,
+      totalCount,
+      page,
+      limit,
+    );
   }
 
   async createMovie(createMovieDto: CreateMovieDto): Promise<Movie> {
