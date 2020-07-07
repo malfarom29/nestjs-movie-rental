@@ -10,6 +10,8 @@ import {
   Patch,
   Delete,
   UseGuards,
+  Get,
+  Query,
 } from '@nestjs/common';
 import { CreateMovieDto } from 'src/movies/dto/create-movie.dto';
 import { Movie } from 'src/database/entities';
@@ -20,12 +22,26 @@ import { RolesGuard } from 'src/shared/guards/roles.guard';
 import { Roles } from 'src/shared/decorators/roles.decorator';
 import { UserRoles } from 'src/shared/constants';
 import { UploadMovieImageDto } from 'src/movies/dto/upload-movie-image.dto';
+import { WhitelistTokenGuard } from 'src/shared/guards/whitelist-token.guard';
+import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
+import { FilterDto } from 'src/shared/dtos/request/filter.dto';
+import { MovieFilterDto } from 'src/shared/dtos/request/filters/movie-filter.dto';
+import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
+import { MovieResponseDto } from 'src/shared/dtos/response/movie-response.dto';
 
 @Controller('admin/movies')
-@UseGuards(AuthGuard(), RolesGuard)
+@UseGuards(AuthGuard(), WhitelistTokenGuard, RolesGuard)
 @Roles(UserRoles.ADMIN)
 export class MoviesController {
   constructor(private moviesService: MoviesService) {}
+
+  @Get()
+  getMovies(
+    @Query() paginationDto: PaginationDto,
+    @Query() filterDto: FilterDto<MovieFilterDto>,
+  ): Promise<PaginatedDataDto<MovieResponseDto[]>> {
+    return this.moviesService.getMovies(paginationDto, filterDto);
+  }
 
   @Post()
   @UsePipes(ValidationPipe)
