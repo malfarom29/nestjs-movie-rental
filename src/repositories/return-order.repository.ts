@@ -9,7 +9,9 @@ import { RentalOrder } from 'src/database/entities';
 
 @EntityRepository(ReturnOrder)
 export class ReturnOrderRepository extends Repository<ReturnOrder> {
-  private readonly logger = new Logger();
+  constructor(private logger: Logger) {
+    super();
+  }
 
   async returnMovie(rentalOrder: RentalOrder): Promise<ReturnOrder> {
     const rentalReturn = this.create();

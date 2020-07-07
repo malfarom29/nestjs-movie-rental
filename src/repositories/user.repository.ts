@@ -16,7 +16,10 @@ import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-  private readonly logger = new Logger();
+  constructor(private logger: Logger) {
+    super();
+  }
+
   async getAllUsers(
     paginationDto: PaginationDto,
   ): Promise<{
