@@ -1,5 +1,5 @@
 import { EmailService } from '../config/email/email.service';
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
@@ -22,7 +22,7 @@ require('dotenv').config();
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, EmailService],
+  providers: [AuthService, JwtStrategy, EmailService, Logger],
   exports: [JwtStrategy, PassportModule],
 })
 export class AuthModule {}
