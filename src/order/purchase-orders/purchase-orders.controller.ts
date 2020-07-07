@@ -23,11 +23,11 @@ import { WhitelistTokenGuard } from 'src/shared/guards/whitelist-token.guard';
 
 @Controller('purchase-orders')
 @UseGuards(AuthGuard(), WhitelistTokenGuard, RolesGuard)
-@Roles(UserRoles.CUSTOMER)
 export class PurchaseOrdersController {
   constructor(private purchaseOrdersService: PurchaseOrdersService) {}
 
   @Post('/movie/:id')
+  @Roles(UserRoles.CUSTOMER)
   purchaseOrder(
     @Body('quantity', ParseIntPipe) quantity: number,
     @Param('id', ParseIntPipe) id: number,
@@ -37,10 +37,23 @@ export class PurchaseOrdersController {
   }
 
   @Get()
+  @Roles(UserRoles.CUSTOMER)
   getMyPurchaseOrders(
     @Query() paginationDto: PaginationDto,
     @GetUser() user: AuthorizedUser,
   ): Promise<PaginatedDataDto<OrderResponseDto<PurchaseResponseDto>[]>> {
-    return this.purchaseOrdersService.getMyPurchaseOrders(user, paginationDto);
+    return this.purchaseOrdersService.getUserPurchaseOrders(
+      user.userId,
+      paginationDto,
+    );
+  }
+
+  @Get('/users/:id')
+  @Roles(UserRoles.ADMIN)
+  getUserPurchaseOrders(
+    @Query() paginationDto: PaginationDto,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<PaginatedDataDto<OrderResponseDto<PurchaseResponseDto>[]>> {
+    return this.purchaseOrdersService.getUserPurchaseOrders(id, paginationDto);
   }
 }
