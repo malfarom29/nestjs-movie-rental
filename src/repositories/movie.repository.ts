@@ -19,7 +19,7 @@ export class MovieRepository extends Repository<Movie> {
   async getMovies(
     paginationDto: PaginationDto,
     filterDto: FilterDto<MovieFilterDto>,
-    user: AuthorizedUser,
+    user?: AuthorizedUser,
   ): Promise<{ data: Movie[]; totalCount: number }> {
     const page = paginationDto.page || 1;
     const limit = paginationDto.limit || 10;
