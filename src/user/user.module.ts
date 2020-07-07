@@ -5,6 +5,8 @@ import { UserService } from './user.service';
 import { UserRepository } from '../repositories/user.repository';
 import { AdminModule } from './admin/admin.module';
 import { UserController } from './user.controller';
+import { UserSerializer } from 'src/shared/serializers/user-serializer';
+import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
 
 @Module({
   imports: [
@@ -12,7 +14,7 @@ import { UserController } from './user.controller';
     TypeOrmModule.forFeature([UserRepository]),
     AdminModule,
   ],
-  providers: [UserService],
+  providers: [UserService, UserSerializer, PaginatedSerializer],
   controllers: [UserController],
 })
 export class UserModule {}

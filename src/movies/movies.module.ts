@@ -7,6 +7,8 @@ import { MovieRepository } from '../repositories/movie.repository';
 import { PassportModule } from '@nestjs/passport';
 import { MovieImageMapper } from 'src/shared/mappers/movie-image.mapper';
 import { VoteRepository } from 'src/repositories/votes.repository';
+import { MovieSerializer } from 'src/shared/serializers/movie-serializer';
+import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
 
 @Module({
   imports: [
@@ -18,7 +20,12 @@ import { VoteRepository } from 'src/repositories/votes.repository';
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [MoviesController],
-  providers: [MoviesService, MovieImageMapper],
+  providers: [
+    MoviesService,
+    MovieImageMapper,
+    PaginatedSerializer,
+    MovieSerializer,
+  ],
   exports: [MoviesService],
 })
 export class MoviesModule {}

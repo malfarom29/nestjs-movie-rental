@@ -13,6 +13,9 @@ import { PurchaseOrdersController } from './purchase-orders/purchase-orders.cont
 import { PurchaseOrdersService } from './purchase-orders/purchase-orders.service';
 import { MovieImageMapper } from 'src/shared/mappers/movie-image.mapper';
 import { VoteRepository } from 'src/repositories/votes.repository';
+import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
+import { MovieSerializer } from 'src/shared/serializers/movie-serializer';
+import { OrderSerializer } from 'src/shared/serializers/order-serializer';
 
 @Module({
   imports: [
@@ -32,6 +35,9 @@ import { VoteRepository } from 'src/repositories/votes.repository';
     MoviesService,
     PurchaseOrdersService,
     MovieImageMapper,
+    PaginatedSerializer,
+    MovieSerializer,
+    OrderSerializer,
   ],
 })
 export class OrderModule {}
