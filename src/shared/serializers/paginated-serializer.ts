@@ -1,7 +1,9 @@
 import { SerializerDto } from './serializer-dto';
 import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
 import { plainToClassFromExist } from 'class-transformer';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class PaginatedSerializer<V>
   implements SerializerDto<PaginatedDataDto<V>> {
   serialize<V>(

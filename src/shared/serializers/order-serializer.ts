@@ -6,7 +6,9 @@ import { ReturnOrderResponseDto } from 'src/shared/dtos/response/return-order-re
 import { MovieResponseDto } from 'src/shared/dtos/response/movie-response.dto';
 import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
 import { SerializerDto } from './serializer-dto';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class OrderSerializer
   implements SerializerDto<ReturnOrderResponseDto, RentalOrderDto> {
   serialize<V>(orderToSerialize: V, movie: Movie): OrderResponseDto<V> {
