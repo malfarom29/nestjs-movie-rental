@@ -1,22 +1,23 @@
-import { OrderSerializer } from './../../shared/serializers/order-serializer';
-import { RentalOrder } from './../../database/entities/rental-order.entity';
+import { OrderSerializer } from '../shared/serializers/order-serializer';
+import { RentalOrder } from '../database/entities/rental-order.entity';
 import {
   Injectable,
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RentalOrderRepository } from '../../repositories/rental-order.repository';
+import { RentalOrderRepository } from '../repositories/rental-order.repository';
 import { MoviesService } from 'src/movies/movies.service';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
-import { RentalOrderDto } from '../../shared/dtos/response/rental-order.dto';
+import { RentalOrderDto } from '../shared/dtos/response/rental-order.dto';
 import { plainToClass } from 'class-transformer';
-import { ReturnOrderRepository } from '../../repositories/return-order.repository';
+import { ReturnOrderRepository } from '../repositories/return-order.repository';
 import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
 import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
 import { ReturnOrderResponseDto } from 'src/shared/dtos/response/return-order-response.dto';
 import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
+import { RentMovieDto } from 'src/customer/dto/rent-movie.dto';
 
 @Injectable()
 export class RentalOrdersService {
@@ -30,9 +31,12 @@ export class RentalOrdersService {
     private paginationSerializer: PaginatedSerializer<RentalOrderDto>,
   ) {}
 
-  async getRentalOrderById(id: number): Promise<RentalOrderDto> {
+  async getRentalOrderById(
+    id: number,
+    user: AuthorizedUser,
+  ): Promise<RentalOrderDto> {
     const rental = await this.rentalOrderRepository.findOne(
-      { id },
+      { id, userId: user.userId },
       { relations: ['movie'] },
     );
 
@@ -46,10 +50,10 @@ export class RentalOrdersService {
   }
 
   async rentMovie(
-    movieId: number,
+    rentMovieDto: RentMovieDto,
     user: AuthorizedUser,
-    toBeReturnedAt: Date,
   ): Promise<OrderResponseDto<RentalOrderDto>> {
+    const { movieId, toBeReturnedAt } = rentMovieDto;
     const movie = await this.moviesService.findMovie(movieId);
 
     if (!movie.availability) {
