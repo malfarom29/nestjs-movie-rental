@@ -11,9 +11,7 @@ import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 
 @EntityRepository(RentalOrder)
 export class RentalOrderRepository extends Repository<RentalOrder> {
-  constructor(private logger: Logger) {
-    super();
-  }
+  private readonly logger = new Logger();
 
   async getUserRentalOrders(
     userId: number,
