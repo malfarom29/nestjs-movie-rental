@@ -1,10 +1,10 @@
-import { PaginatedDataDto } from './../../../shared/dtos/response/paginated-data.dto';
-import { PaginationDto } from './../../../shared/dtos/request/pagination.dto';
-import { RentalOrderDto } from './../../../shared/dtos/response/rental-order.dto';
-import { AuthorizedUser } from './../../../shared/interfaces/authorized-user.interface';
-import { Roles } from './../../../shared/decorators/roles.decorator';
-import { RolesGuard } from './../../../shared/guards/roles.guard';
-import { WhitelistTokenGuard } from './../../../shared/guards/whitelist-token.guard';
+import { PaginatedDataDto } from '../../../shared/dtos/response/paginated-data.dto';
+import { PaginationDto } from '../../../shared/dtos/request/pagination.dto';
+import { RentalOrderDto } from '../../../shared/dtos/response/rental-order.dto';
+import { AuthorizedUser } from '../../../shared/interfaces/authorized-user.interface';
+import { Roles } from '../../../shared/decorators/roles.decorator';
+import { RolesGuard } from '../../../shared/guards/roles.guard';
+import { WhitelistTokenGuard } from '../../../shared/guards/whitelist-token.guard';
 import { RentalOrdersService } from '../../rental-orders.service';
 import {
   Controller,
