@@ -6,13 +6,13 @@ import {
   getConnection,
 } from 'typeorm';
 import { Movie, MovieLog } from '../database/entities';
-import { CreateMovieDto } from '../movies/dto/create-movie.dto';
+import { CreateMovieDto } from '../common/controllers/movies/dto/create-movie.dto';
 import { InternalServerErrorException } from '@nestjs/common';
 import { PaginationDto } from '../shared/dtos/request/pagination.dto';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { FilterDto } from 'src/shared/dtos/request/filter.dto';
 import { MovieFilterDto } from 'src/shared/dtos/request/filters/movie-filter.dto';
-import { UpdateMovieDto } from 'src/movies/dto/update-movie.dto';
+import { UpdateMovieDto } from 'src/common/controllers/movies/dto/update-movie.dto';
 
 @EntityRepository(Movie)
 export class MovieRepository extends Repository<Movie> {
