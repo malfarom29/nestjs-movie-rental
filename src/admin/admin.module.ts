@@ -19,6 +19,9 @@ import { MoviesController } from './controllers/movies/movies.controller';
 import { MoviesService } from 'src/services/movies.service';
 import { VoteRepository } from 'src/repositories/votes.repository';
 import { MovieImageMapper } from 'src/shared/mappers/movie-image.mapper';
+import { PurchasesController } from './controllers/orders/purchases.controller';
+import { PurchaseOrdersService } from 'src/services/purchase-orders.service';
+import { PurchaseOrderRepository } from 'src/repositories/purchase-order.repository';
 
 @Module({
   imports: [
@@ -29,15 +32,22 @@ import { MovieImageMapper } from 'src/shared/mappers/movie-image.mapper';
       MovieAttachmentRepository,
       RentalOrderRepository,
       ReturnOrderRepository,
+      PurchaseOrderRepository,
       VoteRepository,
     ]),
   ],
-  controllers: [RentalsController, UsersController, MoviesController],
+  controllers: [
+    PurchasesController,
+    RentalsController,
+    UsersController,
+    MoviesController,
+  ],
   providers: [
     Logger,
     UserService,
     MoviesService,
     RentalOrdersService,
+    PurchaseOrdersService,
     UserSerializer,
     OrderSerializer,
     MovieSerializer,
