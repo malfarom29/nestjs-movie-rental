@@ -1,5 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserRoles } from 'src/shared/constants';
 
 @Exclude()
 export class MovieResponseDto {
@@ -19,6 +20,12 @@ export class MovieResponseDto {
   @Expose()
   stock: number;
 
+  @ApiProperty({
+    required: false,
+  })
+  @Expose({ groups: [UserRoles.ADMIN] })
+  onRent: number;
+
   @ApiProperty()
   @Expose()
   salePrice: number;
@@ -30,8 +37,20 @@ export class MovieResponseDto {
   @ApiProperty({
     required: false,
   })
+  @Expose({ groups: [UserRoles.ADMIN] })
+  dailyPenalty: number;
+
+  @ApiProperty({
+    required: false,
+  })
   @Expose()
   imageUrl?: string;
+
+  @ApiProperty({
+    required: false,
+  })
+  @Expose({ groups: [UserRoles.ADMIN] })
+  availability: boolean;
 
   @Expose()
   totalVotes: number;
