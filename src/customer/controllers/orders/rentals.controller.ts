@@ -21,6 +21,7 @@ import { UserRoles } from '../../../shared/constants';
 import { GetUser } from 'src/shared/decorators/get-user.decorator';
 import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
 import { RentMovieDto } from 'src/customer/dto/rent-movie.dto';
+import { ReturnOrderResponseDto } from 'src/shared/dtos/response/return-order-response.dto';
 
 @Controller('customer/orders/rentals')
 @UseGuards(AuthGuard(), WhitelistTokenGuard, RolesGuard)
@@ -53,5 +54,13 @@ export class RentalsController {
     @GetUser() user: AuthorizedUser,
   ): Promise<RentalOrderDto> {
     return this.rentalOrdersService.getRentalOrderById(id, user);
+  }
+
+  @Get('/:id/return')
+  returnMovie(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: AuthorizedUser,
+  ): Promise<OrderResponseDto<ReturnOrderResponseDto>> {
+    return this.rentalOrdersService.returnMovie(id, user);
   }
 }
