@@ -82,13 +82,9 @@ export class RentalOrdersService {
 
   async returnMovie(
     rentalOrderId: number,
+    user: AuthorizedUser,
   ): Promise<OrderResponseDto<ReturnOrderResponseDto>> {
-    const rental = await this.findRentalOrder(rentalOrderId);
-    if (!rental) {
-      throw new NotFoundException(
-        `Rental Order with ID "${rentalOrderId}" not found`,
-      );
-    }
+    const rental = await this.findRentalOrder(rentalOrderId, user.userId);
 
     await this.returnOrderRepository.returnMovie(rental);
     const returnOrder = await this.returnOrderRepository.findOne(
@@ -130,7 +126,12 @@ export class RentalOrdersService {
     );
   }
 
-  private findRentalOrder(id: number): Promise<RentalOrder> {
-    return this.rentalOrderRepository.findOne({ id });
+  private findRentalOrder(id: number, userId: number): Promise<RentalOrder> {
+    const rental = this.rentalOrderRepository.findOne({ id, userId });
+    if (!rental) {
+      throw new NotFoundException(`Rental Order with ID "${id}" not found`);
+    }
+
+    return rental;
   }
 }
