@@ -10,8 +10,11 @@ export class MovieImageMapper implements Mapper<MovieResponseDto, Movie> {
   async toDto(movies: Movie[], groups?: string[]): Promise<MovieResponseDto[]> {
     await Promise.all(
       movies.map(async movie => {
-        if (movie.image)
-          movie['imageUrl'] = await aws.downloadSignedUrl(movie.image.key);
+        if (movie.image) {
+          const fileName = `${movie.image.key}.${movie.image.fileType}`;
+
+          movie['imageUrl'] = await aws.downloadSignedUrl(fileName);
+        }
       }),
     );
 
