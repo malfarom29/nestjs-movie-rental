@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from '../repositories/user.repository';
-import { UserRegistrationDto } from 'src/user/dto/user-registration.dto';
+
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtPayload } from './jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
@@ -16,6 +16,7 @@ import { Auth } from '../database/entities/auth.entity';
 import * as fs from 'fs';
 import * as crypto from 'crypto';
 import { Request } from 'express';
+import { UserRegistrationDto } from 'src/common/controllers/users/dto/user-registration.dto';
 
 @Injectable()
 export class AuthService {

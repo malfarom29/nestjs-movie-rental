@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { UserRegistrationDto } from '../user/dto/user-registration.dto';
+
 import {
   ConflictException,
   Logger,
@@ -13,6 +13,7 @@ import { Role } from '../database/entities';
 import { User } from '../database/entities';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
+import { UserRegistrationDto } from 'src/common/controllers/users/dto/user-registration.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {

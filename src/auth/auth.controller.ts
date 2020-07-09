@@ -11,12 +11,13 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { UserRegistrationDto } from 'src/user/dto/user-registration.dto';
+
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { Auth } from '../database/entities/auth.entity';
 import { EmailValidatorPipe } from 'src/shared/pipes/email-validator.pipe';
 import { WhitelistTokenGuard } from 'src/shared/guards/whitelist-token.guard';
+import { UserRegistrationDto } from 'src/common/controllers/users/dto/user-registration.dto';
 
 @Controller('auth')
 export class AuthController {
