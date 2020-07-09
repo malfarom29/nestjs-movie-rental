@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EmailModule } from './config/email/email.module';
-import { UserModule } from './user/user.module';
+
 import { AuthModule } from './auth/auth.module';
 import { OrderModule } from './order/order.module';
 import { AdminModule } from './admin/admin.module';
@@ -12,7 +12,6 @@ import { CommonModule } from './common/common.module';
   imports: [
     TypeOrmModule.forRoot(),
     EmailModule,
-    UserModule,
     AuthModule,
     OrderModule,
     AdminModule,
