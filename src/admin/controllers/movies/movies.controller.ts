@@ -31,7 +31,7 @@ import { UpdateMovieDto } from 'src/common/controllers/movies/dto/update-movie.d
 import { UploadMovieImageDto } from 'src/common/controllers/movies/dto/upload-movie-image.dto';
 
 @Controller('admin/movies')
-@UseGuards(AuthGuard(), WhitelistTokenGuard, RolesGuard)
+@UseGuards(WhitelistTokenGuard, RolesGuard)
 @Roles(UserRoles.ADMIN)
 export class MoviesController {
   constructor(private moviesService: MoviesService) {}

@@ -10,12 +10,13 @@ import { Auth } from 'src/database/entities/auth.entity';
 export class WhitelistTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const { headers } = context.switchToHttp().getRequest();
-    const token = headers.authorization.split(' ')[1];
+    let token = headers.authorization;
 
     if (!token) {
-      return false;
+      return true;
     }
 
+    token = token.split(' ')[1];
     const found = await Auth.findOne({ accessToken: token });
 
     if (!found) {

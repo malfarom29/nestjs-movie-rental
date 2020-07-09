@@ -23,13 +23,13 @@ import { MoviesService } from 'src/services/movies.service';
 export class MoviesController {
   constructor(private moviesService: MoviesService) {}
 
-  @Get()
-  getMovies(
-    @Query() paginationDto: PaginationDto,
-    @Query() filterDto: FilterDto<MovieFilterDto>,
-  ): Promise<PaginatedDataDto<MovieResponseDto[]>> {
-    return this.moviesService.getMovies(paginationDto, filterDto);
-  }
+  // @Get()
+  // getMovies(
+  //   @Query() paginationDto: PaginationDto,
+  //   @Query() filterDto: FilterDto<MovieFilterDto>,
+  // ): Promise<PaginatedDataDto<MovieResponseDto[]>> {
+  //   return this.moviesService.getMovies(paginationDto, filterDto);
+  // }
 
   @ApiTags('movies')
   @ApiResponse({
