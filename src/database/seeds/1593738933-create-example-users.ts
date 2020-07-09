@@ -1,10 +1,6 @@
-import { UserRegistrationDto } from './../../user/dto/user-registration.dto';
-import { Role } from '../entities/role.entity';
 import { Seeder, Factory } from 'typeorm-seeding';
 import { Connection } from 'typeorm';
 import { User } from '../entities/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from 'src/repositories/user.repository';
 import * as bcrypt from 'bcrypt';
 
 export class CreateExampleUsers implements Seeder {
