@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { PurchaseOrderRepository } from '../../repositories/purchase-order.repository';
+import { PurchaseOrderRepository } from '../repositories/purchase-order.repository';
 import {
   Injectable,
   ConflictException,
@@ -14,6 +14,7 @@ import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
 import { OrderSerializer } from 'src/shared/serializers/order-serializer';
 import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
 import { MoviesService } from 'src/services/movies.service';
+import { PurchaseMovieDto } from 'src/customer/dto/purchase-movie.dto';
 
 @Injectable()
 export class PurchaseOrdersService {
@@ -26,21 +27,22 @@ export class PurchaseOrdersService {
   ) {}
 
   async purchaseMovie(
-    id: number,
-    quantity: number,
+    purchaseMovieDto: PurchaseMovieDto,
     user: AuthorizedUser,
   ): Promise<OrderResponseDto<PurchaseResponseDto>> {
-    const movie = await this.moviesService.findMovie(id);
+    const { movieId, quantity } = purchaseMovieDto;
+
+    const movie = await this.moviesService.findMovie(movieId);
 
     if (!movie.availability) {
       throw new BadRequestException(
-        `Movie with ID "${id} is no longer available"`,
+        `Movie with ID "${movieId} is no longer available"`,
       );
     }
 
     if (quantity > movie.stock) {
       throw new ConflictException(
-        `Not enough quantity in stock for movie with ID "${id}"`,
+        `Not enough quantity in stock for movie with ID "${movieId}"`,
       );
     }
 
