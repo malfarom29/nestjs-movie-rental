@@ -13,10 +13,10 @@ export const uploadSignedUrl = async (
   fileType: string;
   mimeType: string;
 }> => {
-  const key = `${nanoid()}.${fileType}`;
+  const key = nanoid();
   const params = {
     Bucket: bucket,
-    Key: key,
+    Key: `${key}.${fileType}`,
     Expires: 120,
     ContentType: mimeType,
   };
