@@ -1,6 +1,6 @@
 import { AuthModule } from './../auth/auth.module';
 import { UserRepository } from './../repositories/user.repository';
-import { UserService } from './../user/user.service';
+import { UserService } from '../services/user.service';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RentalOrdersService } from '../services/rental-orders.service';

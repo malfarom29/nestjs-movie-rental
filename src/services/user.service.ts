@@ -1,5 +1,5 @@
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
-import { User } from './../database/entities/user.entity';
+import { User } from '../database/entities/user.entity';
 import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
 import {
   Injectable,
@@ -10,7 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from 'src/repositories/user.repository';
 import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 import { UserResponseDto } from 'src/shared/dtos/response/user-response.dto';
-import { plainToClass, plainToClassFromExist } from 'class-transformer';
+import { plainToClass } from 'class-transformer';
 import { UserSerializer } from 'src/shared/serializers/user-serializer';
 import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
 
