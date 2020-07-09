@@ -1,4 +1,3 @@
-import { MoviesService } from './../../movies/movies.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PurchaseOrderRepository } from '../../repositories/purchase-order.repository';
 import {
@@ -14,6 +13,7 @@ import { PurchaseResponseDto } from 'src/shared/dtos/response/purchase-response.
 import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
 import { OrderSerializer } from 'src/shared/serializers/order-serializer';
 import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
+import { MoviesService } from 'src/services/movies.service';
 
 @Injectable()
 export class PurchaseOrdersService {
