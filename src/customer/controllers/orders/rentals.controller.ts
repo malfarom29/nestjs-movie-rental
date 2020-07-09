@@ -5,7 +5,7 @@ import { AuthorizedUser } from '../../../shared/interfaces/authorized-user.inter
 import { Roles } from '../../../shared/decorators/roles.decorator';
 import { RolesGuard } from '../../../shared/guards/roles.guard';
 import { WhitelistTokenGuard } from '../../../shared/guards/whitelist-token.guard';
-import { RentalOrdersService } from '../../rental-orders.service';
+import { RentalOrdersService } from '../../../services/rental-orders.service';
 import {
   Controller,
   UseGuards,
