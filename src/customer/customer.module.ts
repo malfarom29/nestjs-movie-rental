@@ -12,12 +12,14 @@ import { OrderSerializer } from '../shared/serializers/order-serializer';
 import { ReturnOrderRepository } from '../repositories/return-order.repository';
 import { MovieRepository } from '../repositories/movie.repository';
 import { MoviesService } from 'src/services/movies.service';
+import { MovieAttachmentRepository } from 'src/repositories/movie-attachment.repository';
 
 @Module({
   imports: [
     AuthModule,
     TypeOrmModule.forFeature([
       MovieRepository,
+      MovieAttachmentRepository,
       VoteRepository,
       RentalOrderRepository,
       ReturnOrderRepository,
