@@ -1,7 +1,9 @@
-import { PassportModule } from '@nestjs/passport';
-import { MoviesService } from './../user/admin/movies/movies.service';
+import { AuthModule } from './../auth/auth.module';
+import { UserRepository } from './../repositories/user.repository';
+import { UserService } from './../user/user.service';
+
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RentalOrdersService } from './../customer/rental-orders.service';
+import { RentalOrdersService } from '../services/rental-orders.service';
 import { Module, Logger } from '@nestjs/common';
 import { RentalsController } from './controllers/orders/rentals.controllers';
 import { RentalOrderRepository } from 'src/repositories/rental-order.repository';
@@ -12,25 +14,30 @@ import { MovieRepository } from 'src/repositories/movie.repository';
 import { MovieAttachmentRepository } from 'src/repositories/movie-attachment.repository';
 import { AdminMovieImageMapper } from 'src/shared/mappers/admin-movie-image.mapper';
 import { MovieSerializer } from 'src/shared/serializers/movie-serializer';
+import { UsersController } from './controllers/users/users.controller';
+import { UserSerializer } from 'src/shared/serializers/user-serializer';
+import { MoviesController } from './controllers/movies/movies.controller';
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    AuthModule,
     TypeOrmModule.forFeature([
+      UserRepository,
       MovieRepository,
       MovieAttachmentRepository,
       RentalOrderRepository,
       ReturnOrderRepository,
     ]),
   ],
-  controllers: [RentalsController],
+  controllers: [RentalsController, UsersController, MoviesController],
   providers: [
     Logger,
+    UserService,
     RentalOrdersService,
-    MoviesService,
+    UserSerializer,
     OrderSerializer,
-    PaginatedSerializer,
     MovieSerializer,
+    PaginatedSerializer,
     AdminMovieImageMapper,
   ],
 })
