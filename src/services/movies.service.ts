@@ -128,7 +128,7 @@ export class MoviesService {
     return { signedUrl: awsUploadData.signedUrl };
   }
 
-  private async findMovie(id: number): Promise<Movie> {
+  async findMovie(id: number): Promise<Movie> {
     const movie = await this.movieRepository.findOne(
       { id },
       { relations: ['image'] },
