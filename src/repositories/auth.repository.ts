@@ -1,6 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Auth } from '../database/entities/auth.entity';
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { nanoid } from 'nanoid';
 
 @EntityRepository(Auth)
@@ -20,5 +23,22 @@ export class AuthRepository extends Repository<Auth> {
     }
 
     return auth;
+  }
+
+  async findRefreshAndValidate(refreshToken: string): Promise<Auth> {
+    const today = new Date();
+    const todayMs = today.getTime();
+
+    const token = await this.findOne({ refreshToken }, { relations: ['user'] });
+    const expiredToken = () => {
+      const expirationMs = token.refreshExpiresAt.getTime();
+      return token && expirationMs < todayMs;
+    };
+
+    if (!token || expiredToken()) {
+      throw new ForbiddenException(`Invalid/Expired Token`);
+    }
+
+    return token;
   }
 }
