@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  BeforeInsert,
 } from 'typeorm';
 import { User } from './user.entity';
 
@@ -21,8 +22,15 @@ export class Auth extends BaseEntity {
   @Column()
   refreshToken: string;
 
-  @Column({ type: 'timestamp', nullable: true })
-  revokedAt: Date;
+  @Column({ type: 'timestamp' })
+  refreshExpiresAt: Date;
+
+  @BeforeInsert()
+  refreshTokenExpiration(): void {
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 2);
+    this.refreshExpiresAt = expiresAt;
+  }
 
   @ManyToOne(
     type => User,
