@@ -4,10 +4,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  BeforeInsert,
   AfterInsert,
 } from 'typeorm';
-import { Movie } from 'src/database/entities/movie.entity';
+import { Movie } from '../../../../movies/entities/movie.entity';
 import { Transform } from 'class-transformer';
 
 @Entity()

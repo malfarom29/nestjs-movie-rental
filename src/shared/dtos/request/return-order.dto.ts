@@ -1,4 +1,4 @@
-import { Movie } from 'src/database/entities/movie.entity';
+import { Movie } from 'src/movies/entities/movie.entity';
 import { Expose, Exclude } from 'class-transformer';
 
 @Exclude()

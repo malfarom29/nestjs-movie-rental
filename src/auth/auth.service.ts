@@ -6,13 +6,13 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from '../repositories/user.repository';
+import { UserRepository } from '../users/repositories/user.repository';
 
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtPayload } from './jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
-import { AuthRepository } from '../repositories/auth.repository';
-import { Auth } from '../database/entities/auth.entity';
+import { AuthRepository } from './repositories/auth.repository';
+import { Auth } from './entities/auth.entity';
 import * as fs from 'fs';
 import * as crypto from 'crypto';
 import { Request } from 'express';

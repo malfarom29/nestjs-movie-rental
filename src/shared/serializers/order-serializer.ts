@@ -1,7 +1,7 @@
-import { ReturnOrder } from './../../database/entities/return-order.entity';
+import { ReturnOrder } from '../../customer/controllers/orders/entities/return-order.entity';
 import { RentalOrderDto } from 'src/shared/dtos/response/rental-order.dto';
 import { plainToClass, plainToClassFromExist } from 'class-transformer';
-import { Movie } from 'src/database/entities';
+import { Movie } from '../../movies/entities/movie.entity';
 import { ReturnOrderResponseDto } from 'src/shared/dtos/response/return-order-response.dto';
 import { MovieResponseDto } from 'src/shared/dtos/response/movie-response.dto';
 import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';

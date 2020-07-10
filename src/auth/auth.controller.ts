@@ -14,7 +14,7 @@ import { Request } from 'express';
 
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { Auth } from '../database/entities/auth.entity';
+import { Auth } from './entities/auth.entity';
 import { EmailValidatorPipe } from 'src/shared/pipes/email-validator.pipe';
 import { WhitelistTokenGuard } from 'src/shared/guards/whitelist-token.guard';
 import { UserRegistrationDto } from 'src/shared/dtos/request/user-registration.dto';

@@ -1,6 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { RentalOrder, User } from '../database/entities';
-import { Movie } from 'src/database/entities';
+import { RentalOrder } from '../entities/rental-order.entity';
+import { User } from '../../../../users/entities/user.entity';
+import { Movie } from '../../../../movies/entities/movie.entity';
 import {
   Logger,
   InternalServerErrorException,

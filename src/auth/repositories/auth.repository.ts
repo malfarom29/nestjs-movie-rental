@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Auth } from '../database/entities/auth.entity';
+import { Auth } from '../entities/auth.entity';
 import {
   InternalServerErrorException,
   ForbiddenException,

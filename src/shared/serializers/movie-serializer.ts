@@ -1,7 +1,7 @@
 import { MovieResponseDto } from '../dtos/response/movie-response.dto';
 import { plainToClass } from 'class-transformer';
 import { SerializerDto } from './serializer-dto';
-import { Movie } from 'src/database/entities';
+import { Movie } from '../../movies/entities/movie.entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

@@ -4,7 +4,7 @@ import {
   ExecutionContext,
   ForbiddenException,
 } from '@nestjs/common';
-import { Auth } from 'src/database/entities/auth.entity';
+import { Auth } from 'src/auth/entities/auth.entity';
 
 @Injectable()
 export class WhitelistTokenGuard implements CanActivate {

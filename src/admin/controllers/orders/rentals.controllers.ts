@@ -1,4 +1,4 @@
-import { RentalOrdersService } from '../../../services/rental-orders.service';
+import { RentalOrdersService } from '../../../customer/controllers/orders/services/rental-orders.service';
 import { RentalOrderDto } from './../../../shared/dtos/response/rental-order.dto';
 import { OrderResponseDto } from './../../../shared/dtos/response/order-response.dto';
 import { PaginatedDataDto } from './../../../shared/dtos/response/paginated-data.dto';

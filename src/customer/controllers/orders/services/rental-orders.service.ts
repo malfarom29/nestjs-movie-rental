@@ -1,5 +1,5 @@
-import { OrderSerializer } from '../shared/serializers/order-serializer';
-import { RentalOrder } from '../database/entities/rental-order.entity';
+import { OrderSerializer } from '../../../../shared/serializers/order-serializer';
+import { RentalOrder } from '../entities/rental-order.entity';
 import {
   Injectable,
   BadRequestException,
@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RentalOrderRepository } from '../repositories/rental-order.repository';
 
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
-import { RentalOrderDto } from '../shared/dtos/response/rental-order.dto';
+import { RentalOrderDto } from '../../../../shared/dtos/response/rental-order.dto';
 import { plainToClass } from 'class-transformer';
 import { ReturnOrderRepository } from '../repositories/return-order.repository';
 import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
@@ -18,7 +18,7 @@ import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
 import { ReturnOrderResponseDto } from 'src/shared/dtos/response/return-order-response.dto';
 import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
 import { RentMovieDto } from 'src/customer/dto/rent-movie.dto';
-import { MoviesService } from './movies.service';
+import { MoviesService } from '../../../../movies/services/movies.service';
 
 @Injectable()
 export class RentalOrdersService {

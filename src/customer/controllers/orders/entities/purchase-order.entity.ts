@@ -1,4 +1,4 @@
-import { User } from './user.entity';
+import { User } from '../../../../users/entities/user.entity';
 import {
   BaseEntity,
   Entity,
@@ -8,7 +8,7 @@ import {
   AfterInsert,
   BeforeInsert,
 } from 'typeorm';
-import { Movie } from './movie.entity';
+import { Movie } from '../../../../movies/entities/movie.entity';
 
 @Entity()
 export class PurchaseOrder extends BaseEntity {

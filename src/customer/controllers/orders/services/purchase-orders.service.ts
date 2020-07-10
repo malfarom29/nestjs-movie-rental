@@ -13,7 +13,7 @@ import { PurchaseResponseDto } from 'src/shared/dtos/response/purchase-response.
 import { OrderResponseDto } from 'src/shared/dtos/response/order-response.dto';
 import { OrderSerializer } from 'src/shared/serializers/order-serializer';
 import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
-import { MoviesService } from 'src/services/movies.service';
+import { MoviesService } from 'src/movies/services/movies.service';
 import { PurchaseMovieDto } from 'src/customer/dto/purchase-movie.dto';
 
 @Injectable()

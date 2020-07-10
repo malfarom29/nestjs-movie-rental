@@ -1,4 +1,4 @@
-import { Movie } from './../entities/movie.entity';
+import { Movie } from '../../movies/entities/movie.entity';
 import Faker from 'faker';
 import { define } from 'typeorm-seeding';
 

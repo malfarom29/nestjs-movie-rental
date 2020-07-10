@@ -1,5 +1,5 @@
-import { User } from './user.entity';
-import { Movie } from 'src/database/entities';
+import { User } from '../../users/entities/user.entity';
+import { Movie } from './movie.entity';
 import {
   Entity,
   Column,

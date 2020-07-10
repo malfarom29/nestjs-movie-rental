@@ -1,6 +1,6 @@
 import { Seeder, Factory } from 'typeorm-seeding';
 import { Connection } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
 export class CreateExampleUsers implements Seeder {

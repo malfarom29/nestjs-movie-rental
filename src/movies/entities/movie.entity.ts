@@ -7,14 +7,11 @@ import {
   BeforeInsert,
   JoinColumn,
   OneToOne,
-  BeforeUpdate,
-  getConnection,
-  AfterLoad,
 } from 'typeorm';
 import { MovieLog } from './movie-log.entity';
-import { RentalOrder } from 'src/database/entities/rental-order.entity';
+import { RentalOrder } from '../../customer/controllers/orders/entities/rental-order.entity';
 import { MovieAttachment } from './movie-attachment.entity';
-import { PurchaseOrder } from './purchase-order.entity';
+import { PurchaseOrder } from '../../customer/controllers/orders/entities/purchase-order.entity';
 import { Vote } from './vote.entity';
 
 @Entity()

@@ -1,14 +1,15 @@
-import { UserRoles } from '../shared/constants';
+import { UserRoles } from '../../shared/constants';
 import {
   EntityRepository,
   Repository,
   SelectQueryBuilder,
   getConnection,
 } from 'typeorm';
-import { Movie, MovieLog } from '../database/entities';
-import { CreateMovieDto } from '../admin/controllers/movies/dto/create-movie.dto';
+import { Movie } from '../entities/movie.entity';
+import { MovieLog } from '../entities/movie-log.entity';
+import { CreateMovieDto } from '../../admin/controllers/movies/dto/create-movie.dto';
 import { InternalServerErrorException } from '@nestjs/common';
-import { PaginationDto } from '../shared/dtos/request/pagination.dto';
+import { PaginationDto } from '../../shared/dtos/request/pagination.dto';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { FilterDto } from 'src/shared/dtos/request/filter.dto';
 import { MovieFilterDto } from 'src/shared/dtos/request/filters/movie-filter.dto';

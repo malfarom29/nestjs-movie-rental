@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { MovieAttachment } from '../database/entities';
+import { MovieAttachment } from '../entities/movie-attachment.entity';
 import { Logger, InternalServerErrorException } from '@nestjs/common';
 import { UploadData } from 'src/admin/controllers/movies/upload-data.interface';
 

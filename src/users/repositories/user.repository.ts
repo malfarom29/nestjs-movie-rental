@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AuthCredentialsDto } from 'src/auth/dto/auth-credentials.dto';
-import { Role } from '../database/entities';
-import { User } from '../database/entities';
+import { Role } from '../entities/role.entity';
+import { User } from '../entities/user.entity';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 import { UserRegistrationDto } from 'src/shared/dtos/request/user-registration.dto';

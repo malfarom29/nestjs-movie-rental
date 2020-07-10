@@ -8,7 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { WhitelistTokenGuard } from 'src/shared/guards/whitelist-token.guard';
-import { MoviesService } from 'src/services/movies.service';
+import { MoviesService } from 'src/movies/services/movies.service';
 import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 import { FilterDto } from 'src/shared/dtos/request/filter.dto';
 import { MovieFilterDto } from 'src/shared/dtos/request/filters/movie-filter.dto';

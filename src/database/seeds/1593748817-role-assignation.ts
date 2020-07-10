@@ -1,5 +1,5 @@
-import { User } from './../entities/user.entity';
-import { Role } from './../entities/role.entity';
+import { User } from '../../users/entities/user.entity';
+import { Role } from '../../users/entities/role.entity';
 import { Seeder, Factory } from 'typeorm-seeding';
 import { Connection } from 'typeorm';
 

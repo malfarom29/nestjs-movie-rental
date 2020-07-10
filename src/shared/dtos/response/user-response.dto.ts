@@ -1,5 +1,5 @@
 import { Expose, Exclude } from 'class-transformer';
-import { Role } from 'src/database/entities';
+import { Role } from '../../../users/entities/role.entity';
 
 @Exclude()
 export class UserResponseDto {

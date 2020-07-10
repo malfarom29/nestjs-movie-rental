@@ -1,22 +1,22 @@
-import { MovieSerializer } from './../shared/serializers/movie-serializer';
-import { MovieImageMapper } from './../shared/mappers/movie-image.mapper';
-import { MovieRepository } from './../repositories/movie.repository';
+import { MovieSerializer } from '../../shared/serializers/movie-serializer';
+import { MovieImageMapper } from '../../shared/mappers/movie-image.mapper';
+import { MovieRepository } from '../repositories/movie.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
 import { MovieResponseDto } from 'src/shared/dtos/response/movie-response.dto';
-import { Movie } from 'src/database/entities';
+import { Movie } from '../entities/movie.entity';
 import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
 import { FilterDto } from 'src/shared/dtos/request/filter.dto';
 import { MovieFilterDto } from 'src/shared/dtos/request/filters/movie-filter.dto';
 import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
-import * as aws from '../config/aws/utils';
+import * as aws from '../../config/aws/utils';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
-import { VoteRepository } from 'src/repositories/votes.repository';
+import { VoteRepository } from 'src/movies/repositories/votes.repository';
 import { CreateMovieDto } from 'src/admin/controllers/movies/dto/create-movie.dto';
 import { UpdateMovieDto } from 'src/admin/controllers/movies/dto/update-movie.dto';
 import { UploadMovieImageDto } from 'src/admin/controllers/movies/dto/upload-movie-image.dto';
-import { MovieAttachmentRepository } from 'src/repositories/movie-attachment.repository';
+import { MovieAttachmentRepository } from 'src/movies/repositories/movie-attachment.repository';
 
 @Injectable()
 export class MoviesService {

@@ -2,7 +2,7 @@ import { GetUser } from './../../../shared/decorators/get-user.decorator';
 import { PaginatedDataDto } from './../../../shared/dtos/response/paginated-data.dto';
 import { UserResponseDto } from './../../../shared/dtos/response/user-response.dto';
 import { PaginationDto } from './../../../shared/dtos/request/pagination.dto';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../users/services/user.service';
 import {
   Controller,
   UseGuards,

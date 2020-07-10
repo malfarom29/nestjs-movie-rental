@@ -1,5 +1,6 @@
-import { PurchaseOrder, User } from '../database/entities';
-import { Movie } from '../database/entities';
+import { PurchaseOrder } from '../entities/purchase-order.entity';
+import { User } from '../../../../users/entities/user.entity';
+import { Movie } from '../../../../movies/entities/movie.entity';
 import {
   Logger,
   InternalServerErrorException,

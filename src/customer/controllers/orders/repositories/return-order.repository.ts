@@ -1,11 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { ReturnOrder } from '../database/entities/return-order.entity';
+import { ReturnOrder } from '../entities/return-order.entity';
 import {
   Logger,
   InternalServerErrorException,
   ConflictException,
 } from '@nestjs/common';
-import { RentalOrder } from 'src/database/entities';
+import { RentalOrder } from '../entities/rental-order.entity';
 
 @EntityRepository(ReturnOrder)
 export class ReturnOrderRepository extends Repository<ReturnOrder> {

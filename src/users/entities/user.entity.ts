@@ -1,4 +1,4 @@
-import { PurchaseOrder } from './purchase-order.entity';
+import { PurchaseOrder } from '../../customer/controllers/orders/entities/purchase-order.entity';
 import {
   Entity,
   Unique,
@@ -12,8 +12,8 @@ import {
 } from 'typeorm';
 import { Role } from './role.entity';
 import * as bcrypt from 'bcrypt';
-import { Auth } from './auth.entity';
-import { Vote } from './vote.entity';
+import { Auth } from '../../auth/entities/auth.entity';
+import { Vote } from '../../movies/entities/vote.entity';
 
 @Entity()
 @Unique(['username', 'email', 'resetPasswordToken'])
