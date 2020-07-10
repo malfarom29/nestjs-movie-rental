@@ -102,6 +102,21 @@ export class AuthService {
     this.authRepository.delete({ accessToken: token });
   }
 
+  async refreshToken(refreshToken: string): Promise<Auth> {
+    const token = await this.authRepository.findRefreshAndValidate(
+      refreshToken,
+    );
+
+    const user = token.user;
+
+    const payload: JwtPayload = { username: user.username };
+    const accessToken = this.jwtService.sign(payload);
+
+    this.authRepository.delete(token);
+
+    return await this.authRepository.signIn(accessToken, user.id);
+  }
+
   private replaceNamePlaceholder(template: string, name: string): string {
     return template.toString().replace('$name', name);
   }
