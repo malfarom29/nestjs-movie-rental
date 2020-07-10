@@ -38,7 +38,7 @@ export class AuthController {
 
   @Delete('/logout')
   @UseGuards(AuthGuard(), WhitelistTokenGuard)
-  logout(@Req() request: Request) {
+  logout(@Req() request: Request): Promise<void> {
     return this.authService.logout(request);
   }
 
@@ -55,5 +55,10 @@ export class AuthController {
     @Body('newPassword') newPassword: string,
   ): Promise<void> {
     return this.authService.resetPassword(token, newPassword);
+  }
+
+  @Post('/refresh')
+  refreshTokne(@Body('refreshToken') refreshToken: string): Promise<Auth> {
+    return this.authService.refreshToken(refreshToken);
   }
 }
