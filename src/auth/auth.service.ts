@@ -16,7 +16,7 @@ import { Auth } from '../database/entities/auth.entity';
 import * as fs from 'fs';
 import * as crypto from 'crypto';
 import { Request } from 'express';
-import { UserRegistrationDto } from 'src/common/controllers/users/dto/user-registration.dto';
+import { UserRegistrationDto } from 'src/shared/dtos/request/user-registration.dto';
 
 @Injectable()
 export class AuthService {

@@ -13,9 +13,9 @@ import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
 import * as aws from '../config/aws/utils';
 import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
 import { VoteRepository } from 'src/repositories/votes.repository';
-import { CreateMovieDto } from 'src/common/controllers/movies/dto/create-movie.dto';
-import { UpdateMovieDto } from 'src/common/controllers/movies/dto/update-movie.dto';
-import { UploadMovieImageDto } from 'src/common/controllers/movies/dto/upload-movie-image.dto';
+import { CreateMovieDto } from 'src/admin/controllers/movies/dto/create-movie.dto';
+import { UpdateMovieDto } from 'src/admin/controllers/movies/dto/update-movie.dto';
+import { UploadMovieImageDto } from 'src/admin/controllers/movies/dto/upload-movie-image.dto';
 import { MovieAttachmentRepository } from 'src/repositories/movie-attachment.repository';
 
 @Injectable()
@@ -56,15 +56,18 @@ export class MoviesService {
     );
   }
 
-  async getMovieById(id: number): Promise<MovieResponseDto> {
+  async getMovieById(
+    id: number,
+    user?: AuthorizedUser,
+  ): Promise<MovieResponseDto> {
     const movie = await this.findMovie(id);
-    const fileName = `${movie.image.key}.${movie.image.fileType}`;
-
-    const signedUrl = movie.image
-      ? await aws.downloadSignedUrl(fileName)
+    const fileName = movie.image
+      ? `${movie.image.key}.${movie.image.fileType}`
       : null;
 
-    return this.movieSerializer.serialize(movie, signedUrl);
+    const signedUrl = fileName ? await aws.downloadSignedUrl(fileName) : null;
+
+    return this.movieSerializer.serialize(movie, signedUrl, user?.roles);
   }
 
   async likeAMovie(movieId: number, user: AuthorizedUser): Promise<void> {
