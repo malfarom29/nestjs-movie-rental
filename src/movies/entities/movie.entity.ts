@@ -7,6 +7,8 @@ import {
   BeforeInsert,
   JoinColumn,
   OneToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { MovieLog } from './movie-log.entity';
 import { RentalOrder } from '../../customer/controllers/orders/entities/rental-order.entity';

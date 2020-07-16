@@ -1,0 +1,15 @@
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Compiled files
+dist
+
+# Dependencies directory
+node_modules
+
+# Git
+.git
+
+# Tests
+coverage

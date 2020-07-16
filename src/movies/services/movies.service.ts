@@ -3,20 +3,20 @@ import { MovieImageMapper } from '../../shared/mappers/movie-image.mapper';
 import { MovieRepository } from '../repositories/movie.repository';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginatedSerializer } from 'src/shared/serializers/paginated-serializer';
-import { MovieResponseDto } from 'src/shared/dtos/response/movie-response.dto';
+import { PaginatedSerializer } from '../../shared/serializers/paginated-serializer';
+import { MovieResponseDto } from '../../shared/dtos/response/movie-response.dto';
 import { Movie } from '../entities/movie.entity';
-import { PaginationDto } from 'src/shared/dtos/request/pagination.dto';
-import { FilterDto } from 'src/shared/dtos/request/filter.dto';
-import { MovieFilterDto } from 'src/shared/dtos/request/filters/movie-filter.dto';
-import { PaginatedDataDto } from 'src/shared/dtos/response/paginated-data.dto';
+import { PaginationDto } from '../../shared/dtos/request/pagination.dto';
+import { FilterDto } from '../../shared/dtos/request/filter.dto';
+import { MovieFilterDto } from '../../shared/dtos/request/filters/movie-filter.dto';
+import { PaginatedDataDto } from '../../shared/dtos/response/paginated-data.dto';
 import * as aws from '../../config/aws/utils';
-import { AuthorizedUser } from 'src/shared/interfaces/authorized-user.interface';
-import { VoteRepository } from 'src/movies/repositories/votes.repository';
-import { CreateMovieDto } from 'src/admin/controllers/movies/dto/create-movie.dto';
-import { UpdateMovieDto } from 'src/admin/controllers/movies/dto/update-movie.dto';
-import { UploadMovieImageDto } from 'src/admin/controllers/movies/dto/upload-movie-image.dto';
-import { MovieAttachmentRepository } from 'src/movies/repositories/movie-attachment.repository';
+import { AuthorizedUser } from '../../shared/interfaces/authorized-user.interface';
+import { VoteRepository } from '../../movies/repositories/votes.repository';
+import { CreateMovieDto } from '../../admin/controllers/movies/dto/create-movie.dto';
+import { UpdateMovieDto } from '../../admin/controllers/movies/dto/update-movie.dto';
+import { UploadMovieImageDto } from '../../admin/controllers/movies/dto/upload-movie-image.dto';
+import { MovieAttachmentRepository } from '../../movies/repositories/movie-attachment.repository';
 
 @Injectable()
 export class MoviesService {

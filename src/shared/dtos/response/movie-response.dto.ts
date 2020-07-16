@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserRoles } from 'src/shared/constants';
+import { UserRoles } from '../../../shared/constants';
 
 @Exclude()
 export class MovieResponseDto {

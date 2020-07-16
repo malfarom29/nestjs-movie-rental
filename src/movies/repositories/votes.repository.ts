@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Vote } from 'src/movies/entities/vote.entity';
+import { Vote } from '../../movies/entities/vote.entity';
 import { InternalServerErrorException } from '@nestjs/common';
 
 @EntityRepository(Vote)

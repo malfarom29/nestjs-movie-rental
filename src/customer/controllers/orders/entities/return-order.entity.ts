@@ -9,7 +9,7 @@ import {
   BeforeInsert,
 } from 'typeorm';
 import { RentalOrder } from './rental-order.entity';
-import { Movie } from 'src/movies/entities/movie.entity';
+import { Movie } from '../../../../movies/entities/movie.entity';
 
 @Entity()
 export class ReturnOrder extends BaseEntity {

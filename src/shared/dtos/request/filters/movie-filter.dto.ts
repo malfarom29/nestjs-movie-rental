@@ -1,12 +1,14 @@
 import { Transform } from 'class-transformer';
-import { IsOptional, IsString, IsBoolean } from 'class-validator';
+import { IsOptional, IsString, IsBoolean, IsNotEmpty } from 'class-validator';
 
 export class MovieFilterDto {
+  @IsNotEmpty()
   @IsOptional()
   @IsString()
   title: string;
 
   @IsOptional()
+  @IsNotEmpty()
   @Transform(availability => {
     if (availability.toLowerCase() == 'true') {
       availability = true;

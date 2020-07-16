@@ -14,13 +14,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const res = ctx.getResponse<Response>();
-    const req = ctx.getRequest<Request>();
+    const { ip, url } = ctx.getRequest<Request>();
     const status = exception.getStatus();
-    const ip = ctx.getRequest().headers['x-forwarded-for'];
 
-    console.log(req.ip);
-    console.log(ip);
+    Logger.error({ ip, url, time: new Date() }, exception.stack);
 
-    res.status(status).json(exception.getResponse());
+    const errorBody = {
+      trace: exception.stack.split('\n').map(trace => trace.trim()),
+    };
+    res.status(status).json(errorBody);
   }
 }

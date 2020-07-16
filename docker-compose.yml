@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    image: postgres:11
+    environment:
+      POSTGRES_USER: '${ORM_USERNAME}'
+      POSTGRES_PASSWORD: '${ORM_PASSWORD}'
+      POSTGRES_MULTIPLE_DATABASES: '${ORM_DATABASE},${ORM_TEST_DATABASE}'
+    ports:
+      - '5434:5432'
+    volumes:
+      - ./pg-init-scripts/:/docker-entrypoint-initdb.d/
+      - ~/movie-rental/data_volume:/var/lib/postgresql/data
+  api:
+    build: .
+    command: npm run start:dev
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
