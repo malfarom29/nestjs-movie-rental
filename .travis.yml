@@ -16,5 +16,5 @@ before_script:
 
 script:
   - docker-compose build
-  - docker-compose npm run build
+  - docker-compose run api npm run build
   - docker-compose run api npm run test
