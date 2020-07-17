@@ -13,7 +13,9 @@ jobs:
   include:
     - stage: test
       if: type = pull_request
-      before_install: ./install-dcompose.sh
+      before_install:
+        - ./build-env.sh
+        - ./install-dcompose.sh
       install: yarn --frozen-lockfile
       cache:
         yarn: true

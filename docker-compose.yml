@@ -14,24 +14,25 @@ services:
   api:
     build: .
     command: npm run start:dev
-    environment:
-      ORM_HOST: '${ORM_HOST}'
-      ORM_CONNECTION: '${ORM_CONNECTION}'
-      ORM_HOST: '${ORM_HOST}'
-      ORM_USERNAME: '${ORM_USERNAME}'
-      ORM_PASSWORD: '${ORM_PASSWORD}'
-      ORM_DATABASE: '${ORM_DATABASE}'
-      ORM_TEST_DATABASE: '${ORM_TEST_DATABASE}'
-      ORM_PORT: '${ORM_PORT}'
-      ORM_SYNCHRONIZE: '${ORM_SYNCHRONIZE}'
-      ORM_ENTITIES: '${ORM_ENTITIES}'
-      ORM_MIGRATIONS_TABLE_NAME: '${ORM_MIGRATIONS_TABLE_NAME}'
-      ORM_MIGRATIONS: '${ORM_MIGRATIONS}'
-      ORM_MIGRATIONS_DIR: '${ORM_MIGRATIONS_DIR}'
-      ORM_MIGRATIONS_RUN: '${ORM_MIGRATIONS_RUN}'
+    # environment:
+    #   ORM_HOST: '${ORM_HOST}'
+    #   ORM_CONNECTION: '${ORM_CONNECTION}'
+    #   ORM_HOST: '${ORM_HOST}'
+    #   ORM_USERNAME: '${ORM_USERNAME}'
+    #   ORM_PASSWORD: '${ORM_PASSWORD}'
+    #   ORM_DATABASE: '${ORM_DATABASE}'
+    #   ORM_TEST_DATABASE: '${ORM_TEST_DATABASE}'
+    #   ORM_PORT: '${ORM_PORT}'
+    #   ORM_SYNCHRONIZE: '${ORM_SYNCHRONIZE}'
+    #   ORM_ENTITIES: '${ORM_ENTITIES}'
+    #   ORM_MIGRATIONS_TABLE_NAME: '${ORM_MIGRATIONS_TABLE_NAME}'
+    #   ORM_MIGRATIONS: '${ORM_MIGRATIONS}'
+    #   ORM_MIGRATIONS_DIR: '${ORM_MIGRATIONS_DIR}'
+    #   ORM_MIGRATIONS_RUN: '${ORM_MIGRATIONS_RUN}'
     volumes:
       - .:/usr/src/app
     ports:
       - '3000:3000'
     depends_on:
       - db
+    env_file: .env
