@@ -17,7 +17,7 @@ import { RolesGuard } from 'src/shared/guards/roles.guard';
 import { Roles } from 'src/shared/decorators/roles.decorator';
 import { UserRoles } from 'src/shared/constants';
 import { CreateMovieDto } from 'src/admin/controllers/movies/dto/create-movie.dto';
-import {Movie} from '../../../movies/entities/movie.entity';
+import { Movie } from '../../../movies/entities/movie.entity';
 import { UpdateMovieDto } from 'src/admin/controllers/movies/dto/update-movie.dto';
 import { UploadMovieImageDto } from 'src/admin/controllers/movies/dto/upload-movie-image.dto';
 
