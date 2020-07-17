@@ -1,13 +1,22 @@
 language: node_js
+dist: xenial
 node_js:
   - 12
 
 services:
   - docker
 
-before_script: ./install-dcompose.sh
+stages:
+  - test
 
-script:
-  - docker-compose build
-  - docker-compose run api npm run build
-  - docker-compose run api npm run test
+jobs:
+  include:
+    - stage: test
+      if: type = pull_request
+      install: ./install-dcompose.sh
+      script:
+        - docker-compose build
+        - docker-compose run api npm run format
+        - docker-compose run api npm run lint
+        - docker-compose run api npm run build
+        - docker-compose run api npm run test
