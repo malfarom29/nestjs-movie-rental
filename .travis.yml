@@ -4,15 +4,24 @@ node_js:
 
 env:
   - DOCKER_COMPOSE_VERSION=1.26.2
+  - ORM_CONNECTION=postgres
+  - ORM_HOST=db
+  - ORM_USERNAME=postgres
+  - ORM_PASSWORD=postgres
+  - ORM_DATABASE=movierental
+  - ORM_TEST_DATABASE=movierental_test
+  - ORM_PORT=5432
+  - ORM_SYNCHRONIZE=false
+  - ORM_ENTITIES=dist/**/entities/*.js
+  - ORM_MIGRATIONS_TABLE_NAME=migration
+  - ORM_MIGRATIONS=dist/database/migrations/*.js
+  - ORM_MIGRATIONS_DIR=migrations
+  - ORM_MIGRATIONS_RUN=false
 
 services:
   - docker
 
-before_script:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
+before_script: ./install-dcompose.sh
 
 script:
   - docker-compose build
