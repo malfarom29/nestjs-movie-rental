@@ -7,21 +7,6 @@ services:
 
 before_script: pip install docker-compose
 
-env:
-  - ORM_CONNECTION=postgres
-  - ORM_HOST=db
-  - ORM_USERNAME=postgres
-  - ORM_PASSWORD=postgres
-  - ORM_DATABASE=movierental
-  - ORM_TEST_DATABASE=movierental_test
-  - ORM_PORT=5432
-  - ORM_SYNCHRONIZE=false
-  - ORM_ENTITIES=dist/**/entities/*.js
-  - ORM_MIGRATIONS_TABLE_NAME=migration
-  - ORM_MIGRATIONS=dist/database/migrations/*.js
-  - ORM_MIGRATIONS_DIR=migrations
-  - ORM_MIGRATIONS_RUN=false
-
 script:
   - docker-compose build
   - docker-compose npm run build
