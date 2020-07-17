@@ -13,14 +13,17 @@ jobs:
   include:
     - stage: test
       if: type = pull_request
-      before_script: ./install-dcompose.sh
+      before_install:
+        - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.4
+        - export PATH="$HOME/.yarn/bin:$PATH"
+      install: ./install-dcompose.sh && yarn --frozen-lockfile
+      cache:
+        yarn: true
+        docker-compose: true
+      # before_script: ./install-dcompose.sh
       script:
+        - yarn format
+        - yarn lint
         - docker-compose build
         - docker-compose run api npm run build
         - docker-compose run api npm run test
-# before_script: ./install-dcompose.sh
-
-# script:
-#   - docker-compose build
-#   - docker-compose run api npm run build
-#   - docker-compose run api npm run test
