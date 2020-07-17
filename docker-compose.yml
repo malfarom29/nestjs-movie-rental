@@ -14,6 +14,8 @@ services:
   api:
     build: .
     command: npm run start:dev
+    environment:
+      ORM_HOST: '${ORM_HOST}'
     volumes:
       - .:/usr/src/app
     ports:
