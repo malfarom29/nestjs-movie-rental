@@ -5,7 +5,7 @@ node_js:
 services:
   - docker
 
-before_script: pip install docker-compose
+before_script: sudo apt install docker-compose
 
 script:
   - docker-compose build
