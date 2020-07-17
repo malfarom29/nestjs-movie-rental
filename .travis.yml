@@ -1,4 +1,5 @@
 language: node_js
+dist: xenial
 node_js:
   - 12
 
@@ -12,8 +13,14 @@ jobs:
   include:
     - stage: test
       if: type = pull_request
-      install: ./install-dcompose.sh
+      before_script: ./install-dcompose.sh
       script:
         - docker-compose build
         - docker-compose run api npm run build
         - docker-compose run api npm run test
+# before_script: ./install-dcompose.sh
+
+# script:
+#   - docker-compose build
+#   - docker-compose run api npm run build
+#   - docker-compose run api npm run test
