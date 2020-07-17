@@ -9,7 +9,7 @@ type Entity = Function | string | EntitySchema<any>;
 
 export const testDbConnection = (entities: Entity[]): TypeOrmModuleOptions => ({
   type: 'postgres',
-  host: process.env.ORM_HOST,
+  host: 'db',
   port: parseInt(process.env.ORM_PORT, 10),
   username: process.env.ORM_USERNAME,
   password: process.env.ORM_PASSWORD,
