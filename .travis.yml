@@ -1,0 +1,28 @@
+language: node_js
+dist: xenial
+node_js:
+  - 12
+
+services:
+  - docker
+
+stages:
+  - test
+
+jobs:
+  include:
+    - stage: test
+      if: type = pull_request
+      before_install:
+        - ./build-env.sh
+        - ./install-dcompose.sh
+      install: yarn --frozen-lockfile
+      cache:
+        yarn: true
+        docker-compose: true
+      script:
+        - yarn format
+        - yarn lint
+        - docker-compose build
+        - docker-compose run api npm run build
+        - docker-compose run api npm run test
