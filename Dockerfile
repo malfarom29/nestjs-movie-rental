@@ -7,4 +7,4 @@ RUN yarn --frozen-lockfile
 # Copy all source files to the container
 COPY . .
 EXPOSE 3000
-CMD ["npm", "run", "start:dev"]
+CMD ["yarn", "start:dev"]
