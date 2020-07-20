@@ -13,7 +13,7 @@ services:
       - ~/movie-rental/data_volume:/var/lib/postgresql/data
   api:
     build: .
-    command: npm run start:dev
+    command: yarn start:dev
     volumes:
       - .:/usr/src/app
     ports:
