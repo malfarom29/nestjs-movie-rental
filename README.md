@@ -7,8 +7,6 @@
 [linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
 [linux-url]: https://travis-ci.org/nestjs/nest
 
-[![Coverage Status](https://coveralls.io/repos/github/malfarom29/nestjs-movie-rental/badge.svg?branch=develop)](https://coveralls.io/github/malfarom29/nestjs-movie-rental?branch=develop)
-
   <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
     <p align="center">
 <a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
