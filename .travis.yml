@@ -24,5 +24,5 @@ jobs:
         - yarn format
         - yarn lint
         - docker-compose build
-        - docker-compose run api npm run build
-        - docker-compose run api npm run test
+        - docker-compose run api yarn build
+        - docker-compose run api yarn test
