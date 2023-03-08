@@ -39,7 +39,7 @@
     "aws-sdk": "^2.706.0",
     "bcrypt": "^5.0.0",
     "class-transformer": "^0.3.1",
-    "class-validator": "^0.12.2",
+    "class-validator": "^0.14.0",
     "crypto": "^1.0.1",
     "lodash": "^4.17.15",
     "nanoid": "^3.1.10",
