@@ -36,7 +36,7 @@
     "@nestjs/typeorm": "^7.1.0",
     "@types/dotenv": "^8.2.0",
     "@types/nodemailer": "^6.4.0",
-    "aws-sdk": "^2.706.0",
+    "aws-sdk": "^2.1354.0",
     "bcrypt": "^5.0.0",
     "class-transformer": "^0.3.1",
     "class-validator": "^0.14.0",
@@ -51,7 +51,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
     "swagger-ui-express": "^4.1.4",
-    "typeorm": "^0.2.25",
+    "typeorm": "^0.3.14",
     "typeorm-seeding": "^1.6.1",
     "uuid": "^8.2.0"
   },
