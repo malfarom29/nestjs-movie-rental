@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import { awsS3 } from './aws-sdk.config';
-require('dotenv').config();
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const bucket = process.env.AWS_BUCKET;
 
